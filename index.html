@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bondu - Realtime Social Network</title>
   
+  <script src="https://cdn.jsdelivr.net/npm/tailwindcss5"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -32,7 +33,8 @@
   <!-- AUTHENTICATION SCREEN -->
   <div id="auth-screen" class="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-black dark:to-zinc-900">
     <div class="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-2xl border border-gray-200 dark:border-zinc-800 transition-all">
-      <div class="text-center mb-8">
+      <div class="text-center mb-6">
+        <p class="text-[11px] font-bold text-blue-500 mb-2 tracking-wide uppercase">Developer: Nafis Ahmed Ratul</p>
         <h1 class="text-5xl font-black text-blue-600 tracking-tight mb-2">Bondu</h1>
         <p class="text-xs font-medium text-gray-500 dark:text-gray-400">আপনার সামাজিক মাধ্যম</p>
       </div>
@@ -83,9 +85,21 @@
       <span class="text-2xl font-black text-blue-600 cursor-pointer select-none" onclick="switchTab('home')">Bondu</span>
 
       <div class="hidden sm:flex items-center space-x-2">
-        <button onclick="switchTab('home')" class="nav-btn nav-btn-home px-4 py-2 rounded-xl text-blue-600 font-semibold"><i data-lucide="home" class="w-5 h-5"></i></button>
-        <button onclick="switchTab('friends')" class="nav-btn nav-btn-friends px-4 py-2 rounded-xl text-gray-500 font-semibold"><i data-lucide="users" class="w-5 h-5"></i></button>
-        <button onclick="switchTab('chat')" class="nav-btn nav-btn-chat px-4 py-2 rounded-xl text-gray-500 font-semibold"><i data-lucide="message-square" class="w-5 h-5"></i></button>
+        <button onclick="switchTab('home')" class="nav-btn nav-btn-home px-4 py-2 rounded-xl text-blue-600 font-semibold relative">
+          <i data-lucide="home" class="w-5 h-5"></i>
+        </button>
+        <button onclick="switchTab('friends')" class="nav-btn nav-btn-friends px-4 py-2 rounded-xl text-gray-500 font-semibold relative">
+          <i data-lucide="users" class="w-5 h-5"></i>
+          <span id="friend-badge" class="hidden absolute top-1 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+        <button onclick="switchTab('chat')" class="nav-btn nav-btn-chat px-4 py-2 rounded-xl text-gray-500 font-semibold relative">
+          <i data-lucide="message-square" class="w-5 h-5"></i>
+          <span id="chat-badge" class="hidden absolute top-1 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+        <button onclick="switchTab('notifications')" class="nav-btn nav-btn-notifications px-4 py-2 rounded-xl text-gray-500 font-semibold relative">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+          <span id="global-notif-badge" class="hidden absolute top-1 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+        </button>
       </div>
 
       <div class="flex items-center space-x-3">
@@ -97,10 +111,17 @@
       </div>
     </nav>
 
-    <main class="max-w-2xl mx-auto pt-20 px-3">
+    <main class="max-w-2xl sm:max-w-4xl mx-auto pt-20 px-3">
       
       <!-- TAB 1: HOME FEED -->
       <section id="tab-home" class="tab-content space-y-4">
+        
+        <div class="bg-white dark:bg-zinc-900 rounded-2xl p-3 shadow-sm border border-gray-200 dark:border-zinc-800 flex items-center space-x-2">
+          <i data-lucide="search" class="w-4 h-4 text-gray-400 ml-2"></i>
+          <input type="text" id="feed-search-input" placeholder="পোস্ট বা নাম দিয়ে সার্চ করুন..." class="w-full bg-transparent text-xs outline-none dark:text-white" oninput="filterPosts(this.value)" />
+          <button onclick="clearSearch()" class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white px-2">রিসেট</button>
+        </div>
+
         <div class="bg-white dark:bg-zinc-900 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-zinc-800 space-y-3">
           <div class="flex space-x-3 items-center">
             <img id="create-post-user-img" src="" class="w-10 h-10 rounded-full object-cover border" />
@@ -136,62 +157,99 @@
         </div>
 
         <div class="bg-white dark:bg-zinc-900 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-zinc-800">
-          <h2 class="text-sm font-bold mb-4">নতুন ব্যবহারকারী (People You May Know)</h2>
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm font-bold">নতুন ব্যবহারকারী (People You May Know)</h2>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-zinc-800/60 rounded-xl p-2.5 mb-4 flex items-center space-x-2 border border-gray-200 dark:border-zinc-700">
+            <i data-lucide="search" class="w-4 h-4 text-gray-400 ml-1"></i>
+            <input type="text" id="user-search-input" placeholder="ব্যবহারকারীর নাম দিয়ে খুঁজুন..." class="w-full bg-transparent text-xs outline-none dark:text-white" oninput="filterSuggestions(this.value)" />
+            <button onclick="clearUserSearch()" class="text-[11px] text-gray-400 hover:text-gray-600 dark:hover:text-white px-1">রিসেট</button>
+          </div>
+
           <div id="friend-suggestions-list" class="space-y-4">
             <div class="text-xs text-gray-400">লোড হচ্ছে...</div>
           </div>
         </div>
       </section>
 
-      <!-- TAB 3: CHAT ROOM -->
+      <!-- TAB 3: CHAT ROOM (WhatsApp Style Flex & Scroll Fixed Layout) -->
       <section id="tab-chat" class="tab-content hidden">
-        <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 h-[78vh] flex flex-col overflow-hidden">
+        <div class="bg-[#efeae2] dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 h-[82vh] sm:h-[80vh] flex flex-col overflow-hidden relative">
           
-          <div class="p-3 border-b dark:border-zinc-800 flex items-center justify-between bg-gray-50/50 dark:bg-zinc-800/50">
+          <!-- Chat Header -->
+          <div class="p-3 border-b border-gray-300/50 dark:border-zinc-800 flex items-center justify-between bg-[#f0f2f5] dark:bg-zinc-900 z-10 flex-shrink-0">
             <div class="flex items-center space-x-3">
-              <img id="chat-target-img" src="https://via.placeholder.com/150" class="w-9 h-9 rounded-full object-cover cursor-pointer" />
+              <img id="chat-target-img" src="https://via.placeholder.com/150" class="w-9 h-9 rounded-full object-cover cursor-pointer border border-gray-300 dark:border-zinc-700" />
               <div>
-                <div id="chat-target-name" class="text-xs font-bold cursor-pointer">চ্যাট সিলেক্ট করুন</div>
-                <div id="chat-target-status" class="text-[10px] text-gray-400">মেসেজ করতে নিচে তালিকা থেকে ফ্রেন্ড নির্বাচন করুন</div>
+                <div id="chat-target-name" class="text-xs font-bold cursor-pointer dark:text-white">চ্যাট সিলেক্ট করুন</div>
+                <div id="chat-target-status" class="text-[10px] text-gray-500 dark:text-gray-400">মেসেজ করতে নিচে তালিকা থেকে ফ্রেন্ড বা গ্রুপ নির্বাচন করুন</div>
               </div>
+            </div>
+            <!-- Group Settings Extra Buttons Area -->
+            <div id="group-header-actions" class="hidden flex items-center space-x-2">
+              <button onclick="openGroupSettingsModal()" class="bg-gray-200 dark:bg-zinc-800 text-xs px-2.5 py-1.5 rounded-xl font-bold">⚙️ সেটিংস</button>
+              <button onclick="leaveCurrentGroup()" class="bg-red-500 text-white text-xs px-2.5 py-1.5 rounded-xl font-bold">leave</button>
             </div>
           </div>
 
-          <div class="grid grid-cols-3 flex-1 overflow-hidden">
-            <div id="chat-users-list" class="col-span-1 border-r dark:border-zinc-800 overflow-y-auto p-2 space-y-2">
-              <div class="text-[11px] text-gray-400 text-center py-4">ইউজার লোড হচ্ছে...</div>
+          <!-- Chat Body Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 flex-1 overflow-hidden h-full">
+            
+            <!-- Sidebar: Friends/Groups List -->
+            <div id="chat-users-list" class="hidden sm:block col-span-1 border-r border-gray-300/50 dark:border-zinc-800 overflow-y-auto p-2 space-y-1 bg-white/70 dark:bg-zinc-900/70 h-full">
+              <div class="text-[11px] text-gray-400 text-center py-4">ফ্রেন্ড লিস্ট খালি...</div>
             </div>
 
-            <div class="col-span-2 flex flex-col justify-between h-full bg-gray-50/30 dark:bg-black/20">
-              <div id="chat-messages-box" class="p-4 space-y-3 overflow-y-auto flex-1">
-                <div class="text-xs text-center text-gray-400 mt-10">মেসেজ আদান-প্রদান করতে কোনো আইডি নির্বাচন করুন।</div>
+            <!-- Chat Conversation Area (WhatsApp Theme & Scroll Layout) -->
+            <div class="col-span-1 sm:col-span-2 flex flex-col h-full bg-[radial-gradient(#e5ddd5_1px,transparent_1px)] dark:bg-[radial-gradient(#182229_1px,transparent_1px)] [background-size:16px_16px] bg-[#efeae2] dark:bg-[#0b141a] relative overflow-hidden">
+              
+              <!-- Messages Scrollable Container -->
+              <div id="chat-messages-box" class="p-4 space-y-3 overflow-y-auto flex-1 scroll-smooth w-full">
+                <div class="text-xs text-center text-gray-500 dark:text-gray-400 mt-10 bg-white/60 dark:bg-zinc-800/60 py-3 px-4 rounded-xl shadow-sm mx-auto max-w-xs">মেসেজ আদান-প্রদান করতে কোনো ফ্রেন্ড বা গ্রুপ নির্বাচন করুন।</div>
               </div>
 
-              <div id="reply-preview-container" class="hidden px-3 py-1.5 bg-gray-100 dark:bg-zinc-800 border-t dark:border-zinc-700 flex justify-between items-center text-xs">
+              <!-- Reply Preview Section -->
+              <div id="reply-preview-container" class="hidden px-3 py-1.5 bg-[#f0f2f5] dark:bg-zinc-800 border-t border-gray-300 dark:border-zinc-700 flex justify-between items-center text-xs flex-shrink-0">
                 <div class="truncate text-gray-600 dark:text-gray-300" id="reply-preview-text">রিপ্লাই...</div>
                 <button onclick="cancelReply()" class="text-red-500 font-bold ml-2">✕</button>
               </div>
 
-              <div class="p-2 border-t dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-2">
+              <!-- WhatsApp Style Fixed Input Footer Area -->
+              <div class="p-2.5 border-t border-gray-300/60 dark:border-zinc-800 bg-[#f0f2f5] dark:bg-zinc-900 space-y-2 flex-shrink-0 z-20 shadow-lg">
                 <div class="flex items-center space-x-2">
-                  <label class="cursor-pointer bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 text-gray-700 dark:text-gray-300 text-[10px] px-2.5 py-1 rounded-lg flex items-center space-x-1">
-                    <i data-lucide="image" class="w-3 h-3"></i>
+                  <label class="cursor-pointer bg-white dark:bg-zinc-800 hover:bg-gray-100 text-gray-700 dark:text-gray-300 text-[10px] px-2.5 py-1 rounded-lg border border-gray-300 dark:border-zinc-700 flex items-center space-x-1 shadow-sm">
+                    <i data-lucide="image" class="w-3 h-3 text-emerald-600"></i>
                     <span id="chat-file-label">ছবি যুক্ত করুন</span>
                     <input type="file" id="chat-image-file" accept="image/*" class="hidden" />
                   </label>
                 </div>
                 <div class="flex items-center space-x-2">
-                  <input type="text" id="chat-input-field" placeholder="মেসেজ লিখুন..." class="flex-1 bg-gray-100 dark:bg-zinc-800 px-4 py-2.5 rounded-full text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" />
-                  <button id="send-msg-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-2.5 rounded-full"><i data-lucide="send" class="w-4 h-4"></i></button>
+                  <input type="text" id="chat-input-field" placeholder="টাইপ এ মেসেজ..." class="flex-1 bg-white dark:bg-zinc-800 px-4 py-2.5 rounded-full text-xs outline-none border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-emerald-500 dark:text-white shadow-inner" />
+                  <button id="send-msg-btn" class="bg-[#00a884] hover:bg-[#01755c] text-white p-2.5 rounded-full shadow transition flex items-center justify-center"><i data-lucide="send" class="w-4 h-4"></i></button>
                 </div>
               </div>
+
             </div>
           </div>
 
         </div>
       </section>
 
-      <!-- TAB 4: PROFILE WITH BIO FEATURE -->
+      <!-- TAB 4: NOTIFICATIONS -->
+      <section id="tab-notifications" class="tab-content hidden space-y-4">
+        <div class="bg-white dark:bg-zinc-900 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-zinc-800">
+          <h2 class="text-sm font-bold mb-4 flex items-center space-x-2">
+            <i data-lucide="bell" class="w-4 h-4 text-blue-500"></i>
+            <span>সকল নোটিফিকেশন</span>
+          </h2>
+          <div id="notifications-list" class="space-y-3">
+            <div class="text-xs text-gray-400 text-center py-6">কোনো নতুন নোটিফিকেশন নেই।</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: PROFILE -->
       <section id="tab-profile" class="tab-content hidden space-y-4">
         <div class="bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-sm border border-gray-200 dark:border-zinc-800 p-5">
           <div class="flex justify-between items-start mb-3">
@@ -204,7 +262,6 @@
           <h1 id="profile-name-text" class="text-xl font-black">...</h1>
           <p id="profile-email-text" class="text-xs text-gray-500 mt-0.5">...</p>
           
-          <!-- BIO DISPLAY FIELD -->
           <p id="profile-bio-text" class="text-xs italic text-gray-600 dark:text-gray-300 mt-2 bg-gray-50 dark:bg-zinc-800/50 p-2.5 rounded-xl border dark:border-zinc-800">বায়ো যুক্ত করা হয়নি...</p>
 
           <p id="profile-friends-count" class="text-xs font-bold text-blue-600 mt-3">মোট ফ্রেন্ড: 0</p>
@@ -216,7 +273,6 @@
               <input type="text" id="edit-name-input" class="w-full bg-gray-50 dark:bg-zinc-800 border dark:border-zinc-700 rounded-xl px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" />
             </div>
             
-            <!-- BIO EDIT INPUT -->
             <div>
               <label class="text-[11px] font-semibold text-gray-600 dark:text-gray-400 block mb-1">আপনার বায়ো (Bio)</label>
               <input type="text" id="edit-bio-input" placeholder="নিজের সম্পর্কে কিছু লিখুন..." class="w-full bg-gray-50 dark:bg-zinc-800 border dark:border-zinc-700 rounded-xl px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" />
@@ -249,24 +305,26 @@
       </div>
     </div>
 
-    <!-- OTHER USER PROFILE POPUP MODAL WITH PROFILE LINK COPY FEATURE -->
+    <!-- OTHER USER PROFILE MODAL -->
     <div id="user-profile-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div class="bg-white dark:bg-zinc-900 w-full max-w-md rounded-3xl p-5 border border-gray-200 dark:border-zinc-800 shadow-2xl relative max-h-[85vh] overflow-y-auto">
         <button onclick="closeUserProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-white p-1">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
-        <div class="flex items-center space-x-4 mb-2">
-          <img id="modal-user-pic" src="" class="w-16 h-16 rounded-full object-cover border-2 border-blue-500" />
-          <div>
-            <h3 id="modal-user-name" class="text-lg font-black"></h3>
-            <p id="modal-user-email" class="text-xs text-gray-500"></p>
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-4">
+            <img id="modal-user-pic" src="" class="w-16 h-16 rounded-full object-cover border-2 border-blue-500" />
+            <div>
+              <h3 id="modal-user-name" class="text-lg font-black"></h3>
+              <p id="modal-user-email" class="text-xs text-gray-500"></p>
+            </div>
           </div>
+          <div id="modal-action-btn-container"></div>
         </div>
-        <!-- BIO VIEW -->
+        
         <p id="modal-user-bio" class="text-xs italic text-gray-600 dark:text-gray-300 mb-2 bg-gray-50 dark:bg-zinc-800/50 p-2 rounded-xl">বায়ো নেই...</p>
         <p id="modal-user-friends" class="text-xs font-bold text-blue-600 mb-3">মোট ফ্রেন্ড: 0</p>
         
-        <!-- NEW PROFILE LINK COPY BUTTON FOR OTHER USER -->
         <div class="mb-4">
           <input type="text" id="modal-profile-link-input" readonly class="hidden" />
           <button onclick="copyUserProfileLink()" class="w-full bg-blue-50 dark:bg-zinc-800 hover:bg-blue-100 dark:hover:bg-zinc-700 text-blue-600 dark:text-blue-400 text-xs font-bold py-2.5 px-3 rounded-xl border border-blue-200 dark:border-zinc-700 transition flex items-center justify-center space-x-2">
@@ -283,11 +341,67 @@
       </div>
     </div>
 
+    <!-- CREATE GROUP MODAL -->
+    <div id="create-group-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-zinc-900 w-full max-w-sm rounded-3xl p-5 border border-gray-200 dark:border-zinc-800 shadow-2xl space-y-4 relative">
+        <h3 class="text-sm font-bold">নতুন চ্যাট গ্রুপ তৈরি করুন</h3>
+        <div>
+          <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">গ্রুপের নাম</label>
+          <input type="text" id="group-name-input" placeholder="গ্রুপের নাম লিখুন..." class="w-full bg-gray-100 dark:bg-zinc-800 px-3 py-2 rounded-xl text-xs outline-none dark:text-white" />
+        </div>
+        <div class="flex space-x-2 pt-2">
+          <button onclick="createChatGroup()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-2.5 rounded-xl font-bold">তৈরি করুন</button>
+          <button onclick="closeGroupModal()" class="flex-1 bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 text-xs py-2.5 rounded-xl font-bold">বাতিল</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP SETTINGS MODAL (Admin Edit Name/Pic & Add Members) -->
+    <div id="group-settings-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-zinc-900 w-full max-w-sm rounded-3xl p-5 border border-gray-200 dark:border-zinc-800 shadow-2xl space-y-4 relative max-h-[85vh] overflow-y-auto">
+        <h3 class="text-sm font-bold mb-2">গ্রুপ সেটিংস</h3>
+        
+        <div id="admin-only-settings" class="space-y-3">
+          <div>
+            <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">গ্রুপের নাম পরিবর্তন</label>
+            <input type="text" id="settings-group-name-input" class="w-full bg-gray-100 dark:bg-zinc-800 px-3 py-2 rounded-xl text-xs outline-none dark:text-white" />
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">গ্রুপের ছবি পরিবর্তন</label>
+            <input type="file" id="settings-group-pic-file" accept="image/*" class="w-full bg-gray-100 dark:bg-zinc-800 px-3 py-2 rounded-xl text-xs outline-none dark:text-white" />
+          </div>
+          <button onclick="saveGroupInfoChanges()" class="w-full bg-blue-600 text-white text-xs py-2 rounded-xl font-bold">নাম ও ছবি সেভ করুন</button>
+          
+          <hr class="my-2 border-gray-200 dark:border-zinc-700" />
+          <h4 class="text-xs font-bold text-gray-600 dark:text-gray-400">ফ্রেন্ড যোগ করুন</h4>
+          <div id="group-add-friends-list" class="space-y-2 max-h-36 overflow-y-auto">
+            <!-- Dynamic Friends list to add -->
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button onclick="closeGroupSettingsModal()" class="w-full bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 text-xs py-2.5 rounded-xl font-bold">বন্ধ করুন</button>
+        </div>
+      </div>
+    </div>
+
     <!-- MOBILE NAVBAR -->
     <nav class="fixed bottom-0 left-0 w-full bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-800 flex justify-around py-2.5 sm:hidden z-40">
-      <button onclick="switchTab('home')" class="nav-btn nav-btn-home text-blue-600 p-2"><i data-lucide="home" class="w-6 h-6"></i></button>
-      <button onclick="switchTab('friends')" class="nav-btn nav-btn-friends text-gray-500 p-2"><i data-lucide="users" class="w-6 h-6"></i></button>
-      <button onclick="switchTab('chat')" class="nav-btn nav-btn-chat text-gray-500 p-2"><i data-lucide="message-square" class="w-6 h-6"></i></button>
+      <button onclick="switchTab('home')" class="nav-btn nav-btn-home text-blue-600 p-2 relative">
+        <i data-lucide="home" class="w-6 h-6"></i>
+      </button>
+      <button onclick="switchTab('friends')" class="nav-btn nav-btn-friends text-gray-500 p-2 relative">
+        <i data-lucide="users" class="w-6 h-6"></i>
+        <span id="friend-badge-m" class="hidden absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+      </button>
+      <button onclick="switchTab('chat')" class="nav-btn nav-btn-chat text-gray-500 p-2 relative">
+        <i data-lucide="message-square" class="w-6 h-6"></i>
+        <span id="chat-badge-m" class="hidden absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+      </button>
+      <button onclick="switchTab('notifications')" class="nav-btn nav-btn-notifications text-gray-500 p-2 relative">
+        <i data-lucide="bell" class="w-6 h-6"></i>
+        <span id="global-notif-badge-m" class="hidden absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+      </button>
       <button onclick="switchTab('profile')" class="nav-btn nav-btn-profile text-gray-500 p-2"><i data-lucide="user" class="w-6 h-6"></i></button>
     </nav>
   </div>
@@ -309,11 +423,18 @@
     const db = firebase.firestore();
 
     let currentUserData = null;
-    let selectedChatUserId = null;
+    let selectedChatTargetId = null;
+    let isGroupChatTarget = false;
+    let currentSelectedGroupData = null;
     let replyingToMessage = null;
     let postImageBase64 = '';
     let chatImageBase64 = '';
     let profileImageBase64 = '';
+    let groupSettingsImageBase64 = '';
+    let allLoadedPosts = [];
+    let allLoadedSuggestions = [];
+    let myFriendsListCache = [];
+    let replyingToCommentId = null;
 
     lucide.createIcons();
 
@@ -352,6 +473,15 @@
       }
     });
 
+    document.getElementById('settings-group-pic-file').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        convertFileToBase64(file, (base64) => {
+          groupSettingsImageBase64 = base64;
+        });
+      }
+    });
+
     window.switchTab = function(tabName) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
       const target = document.getElementById(`tab-${tabName}`);
@@ -365,6 +495,11 @@
         btn.classList.remove('text-gray-500');
         btn.classList.add('text-blue-600');
       });
+
+      if(tabName === 'notifications') {
+        document.getElementById('global-notif-badge').classList.add('hidden');
+        document.getElementById('global-notif-badge-m').classList.add('hidden');
+      }
     };
 
     let isRegisterMode = false;
@@ -434,6 +569,12 @@
 
         db.collection('users').doc(user.uid).collection('friends').onSnapshot(snapshot => {
           document.getElementById('profile-friends-count').innerText = `মোট ফ্রেন্ড: ${snapshot.size}`;
+          myFriendsListCache = [];
+          snapshot.forEach(fDoc => {
+            db.collection('users').doc(fDoc.id).get().then(uDoc => {
+              if(uDoc.exists) myFriendsListCache.push(uDoc.data());
+            });
+          });
         });
 
         loadRealPosts();
@@ -480,10 +621,14 @@
     });
 
     window.viewUserProfile = function(targetUid) {
+      if(targetUid === auth.currentUser.uid) {
+        switchTab('profile');
+        return;
+      }
+
       const modal = document.getElementById('user-profile-modal');
       modal.classList.remove('hidden');
 
-      // Generate profile link and store in hidden input
       const profileUrl = window.location.origin + window.location.pathname + '#profile-' + targetUid;
       document.getElementById('modal-profile-link-input').value = profileUrl;
 
@@ -494,6 +639,30 @@
           document.getElementById('modal-user-email').innerText = u.email || '';
           document.getElementById('modal-user-bio').innerText = u.bio || 'বায়ো নেই...';
           document.getElementById('modal-user-pic').src = u.profilePic || '';
+
+          const actionContainer = document.getElementById('modal-action-btn-container');
+          actionContainer.innerHTML = '';
+
+          db.collection('users').doc(auth.currentUser.uid).collection('friends').doc(targetUid).get().then(friendDoc => {
+            if(friendDoc.exists) {
+              actionContainer.innerHTML = `<span class="text-xs font-bold text-green-600 bg-green-50 dark:bg-zinc-800 px-3 py-1.5 rounded-xl">Friends ✓</span>`;
+            } else {
+              db.collection('users').doc(targetUid).collection('friendRequests').doc(auth.currentUser.uid).get().then(reqDoc => {
+                if(reqDoc.exists) {
+                  // Cancel option for sent friend requests
+                  actionContainer.innerHTML = `<button onclick="cancelSentFriendRequest('${targetUid}')" class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-xl font-bold">Cancel Request</button>`;
+                } else {
+                  db.collection('users').doc(auth.currentUser.uid).collection('friendRequests').doc(targetUid).get().then(incomingDoc => {
+                    if(incomingDoc.exists) {
+                      actionContainer.innerHTML = `<button onclick="acceptRequest('${targetUid}'); closeUserProfileModal();" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-xl font-bold">Accept Request</button>`;
+                    } else {
+                      actionContainer.innerHTML = `<button onclick="sendFriendRequestFromModal('${targetUid}', '${u.name}')" id="modal-add-friend-btn" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-xl font-bold">+ Add Friend</button>`;
+                    }
+                  });
+                }
+              });
+            }
+          });
         }
       });
 
@@ -517,6 +686,26 @@
             </div>
           `;
         });
+      });
+    };
+
+    window.sendFriendRequestFromModal = function(targetUid, targetName) {
+      db.collection('users').doc(targetUid).collection('friendRequests').doc(auth.currentUser.uid).set({
+        senderId: auth.currentUser.uid,
+        senderName: currentUserData.name,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        const container = document.getElementById('modal-action-btn-container');
+        container.innerHTML = `<button onclick="cancelSentFriendRequest('${targetUid}')" class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-xl font-bold">Cancel Request</button>`;
+        loadRealUsersAndRequests();
+      });
+    };
+
+    window.cancelSentFriendRequest = function(targetUid) {
+      db.collection('users').doc(targetUid).collection('friendRequests').doc(auth.currentUser.uid).delete().then(() => {
+        const container = document.getElementById('modal-action-btn-container');
+        container.innerHTML = `<button onclick="sendFriendRequestFromModal('${targetUid}', '')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-xl font-bold">+ Add Friend</button>`;
+        loadRealUsersAndRequests();
       });
     };
 
@@ -556,67 +745,181 @@
 
     function loadRealPosts() {
       db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
-        const container = document.getElementById('posts-container');
-        container.innerHTML = '';
-
-        if(snapshot.empty) {
-          container.innerHTML = `<div class="text-center text-xs text-gray-500 py-6">এখনো কোনো পোস্ট নেই!</div>`;
-          return;
-        }
+        let isFirstLoad = allLoadedPosts.length === 0;
+        allLoadedPosts = [];
+        let hasNewPost = false;
 
         snapshot.forEach(docSnap => {
-          const post = docSnap.data();
-          const postId = docSnap.id;
+          const postData = { id: docSnap.id, ...docSnap.data() };
+          allLoadedPosts.push(postData);
+          if(!isFirstLoad && postData.userId !== auth.currentUser?.uid) {
+            hasNewPost = true;
+          }
+        });
 
-          container.innerHTML += `
-            <div class="bg-white dark:bg-zinc-900 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-zinc-800 space-y-3">
-              <div class="flex items-center space-x-3 cursor-pointer" onclick="viewUserProfile('${post.userId}')">
-                <img src="${post.userPic}" class="w-9 h-9 rounded-full object-cover border" />
-                <div class="text-xs font-bold hover:underline">${post.userName}</div>
+        if(hasNewPost) {
+          triggerNotificationUI("আপনার কোনো বন্ধু নতুন পোস্ট করেছেন!");
+        }
+
+        renderPosts(allLoadedPosts);
+      });
+    }
+
+    function triggerNotificationUI(messageText) {
+      document.getElementById('global-notif-badge').classList.remove('hidden');
+      document.getElementById('global-notif-badge-m').classList.remove('hidden');
+
+      const notifList = document.getElementById('notifications-list');
+      if(notifList.innerHTML.includes('কোনো নতুন নোটিফিকেশন নেই')) {
+        notifList.innerHTML = '';
+      }
+
+      notifList.innerHTML += `
+        <div class="p-3 bg-blue-50 dark:bg-zinc-800/80 rounded-xl border border-blue-100 dark:border-zinc-700 flex items-center justify-between">
+          <div class="text-xs font-semibold">${messageText}</div>
+          <span class="text-[10px] text-gray-400">এইমাত্র</span>
+        </div>
+      `;
+    }
+
+    function renderPosts(postsToRender) {
+      const container = document.getElementById('posts-container');
+      container.innerHTML = '';
+
+      if(postsToRender.length === 0) {
+        container.innerHTML = `<div class="text-center text-xs text-gray-500 py-6">কোনো পোস্ট খুঁজে পাওয়া যায়নি!</div>`;
+        return;
+      }
+
+      postsToRender.forEach(post => {
+        const postId = post.id;
+
+        container.innerHTML += `
+          <div class="bg-white dark:bg-zinc-900 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-zinc-800 space-y-3">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="viewUserProfile('${post.userId}')">
+              <img src="${post.userPic}" class="w-9 h-9 rounded-full object-cover border" />
+              <div class="text-xs font-bold hover:underline">${post.userName}</div>
+            </div>
+            <p class="text-xs leading-relaxed">${formatTaggedText(post.text)}</p>
+            ${post.postImg ? `<img src="${post.postImg}" class="w-full rounded-xl max-h-80 object-cover" />` : ''}
+            
+            <div class="flex items-center justify-between pt-2 border-t dark:border-zinc-800 text-xs text-gray-500">
+              <button onclick="toggleLike('${postId}')" id="like-btn-${postId}" class="flex items-center space-x-1 hover:text-blue-600 font-semibold">
+                <span>👍 লাইক</span> (<span id="like-count-${postId}">0</span>)
+              </button>
+              <button onclick="toggleCommentBox('${postId}')" class="flex items-center space-x-1 hover:text-blue-600 font-semibold">
+                <span>💬 কমেন্ট</span>
+              </button>
+              <button onclick="openShareModal('${postId}')" class="flex items-center space-x-1 hover:text-blue-600 font-semibold">
+                <span>↗ শেয়ার</span>
+              </button>
+            </div>
+
+            <div id="comments-section-${postId}" class="hidden space-y-2 pt-2 border-t dark:border-zinc-800">
+              <div id="comments-list-${postId}" class="space-y-1.5 max-h-40 overflow-y-auto text-xs">
+                <div class="text-gray-400">কমেন্ট লোড হচ্ছে...</div>
               </div>
-              <p class="text-xs leading-relaxed">${post.text}</p>
-              ${post.postImg ? `<img src="${post.postImg}" class="w-full rounded-xl max-h-80 object-cover" />` : ''}
+              <div id="comment-replying-indicator-${postId}" class="hidden text-[10px] text-blue-500 font-bold flex justify-between items-center">
+                <span id="comment-replying-text">রিপ্লাই দেওয়া হচ্ছে...</span>
+                <button onclick="cancelCommentReply('${postId}')" class="text-red-500">✕ বাতিল</button>
+              </div>
               
-              <div class="flex items-center justify-between pt-2 border-t dark:border-zinc-800 text-xs text-gray-500">
-                <button onclick="toggleLike('${postId}')" id="like-btn-${postId}" class="flex items-center space-x-1 hover:text-blue-600 font-semibold">
-                  <span>👍 লাইক</span> (<span id="like-count-${postId}">0</span>)
-                </button>
-                <button onclick="toggleCommentBox('${postId}')" class="flex items-center space-x-1 hover:text-blue-600 font-semibold">
-                  <span>💬 কমেন্ট</span>
-                </button>
-                <button onclick="openShareModal('${postId}')" class="flex items-center space-x-1 hover:text-blue-600 font-semibold">
-                  <span>↗ শেয়ার</span>
-                </button>
-              </div>
-
-              <div id="comments-section-${postId}" class="hidden space-y-2 pt-2 border-t dark:border-zinc-800">
-                <div id="comments-list-${postId}" class="space-y-1.5 max-h-32 overflow-y-auto text-xs">
-                  <div class="text-gray-400">কমেন্ট লোড হচ্ছে...</div>
-                </div>
+              <div class="relative">
+                <div id="mention-dropdown-${postId}" class="hidden absolute bottom-full left-0 w-full bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl shadow-lg max-h-32 overflow-y-auto z-20 p-1 space-y-1"></div>
                 <div class="flex space-x-2 mt-2">
-                  <input type="text" id="comment-input-${postId}" placeholder="কমেন্ট লিখুন..." class="flex-1 bg-gray-100 dark:bg-zinc-800 px-3 py-1.5 rounded-xl text-xs outline-none dark:text-white" />
-                  <button onclick="addComment('${postId}')" class="bg-blue-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold">সেন্ড</button>
+                  <input type="text" id="comment-input-${postId}" oninput="handleCommentInput(event, '${postId}')" placeholder="কমেন্ট লিখুন (@ দিয়ে ফ্রেন্ড মেনশন করুন)..." class="flex-1 bg-gray-100 dark:bg-zinc-800 px-3 py-1.5 rounded-xl text-xs outline-none dark:text-white" />
+                  <button onclick="addComment('${postId}', '${post.userId}')" class="bg-blue-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold">সেন্ড</button>
                 </div>
               </div>
             </div>
-          `;
+          </div>
+        `;
 
-          db.collection('posts').doc(postId).collection('likes').onSnapshot(likesSnap => {
-            const countEl = document.getElementById(`like-count-${postId}`);
-            if(countEl) countEl.innerText = likesSnap.size;
-            
-            const btnEl = document.getElementById(`like-btn-${postId}`);
-            if(btnEl && likesSnap.docs.some(d => d.id === auth.currentUser.uid)) {
-              btnEl.classList.add('text-blue-600');
-            } else if(btnEl) {
-              btnEl.classList.remove('text-blue-600');
+        db.collection('posts').doc(postId).collection('likes').onSnapshot(likesSnap => {
+          const countEl = document.getElementById(`like-count-${postId}`);
+          if(countEl) countEl.innerText = likesSnap.size;
+          
+          const btnEl = document.getElementById(`like-btn-${postId}`);
+          if(btnEl && likesSnap.docs.some(d => d.id === auth.currentUser.uid)) {
+            btnEl.classList.add('text-blue-600');
+            if(likesSnap.metadata.hasPendingWrites === false) {
+              likesSnap.docChanges().forEach(change => {
+                if(change.type === 'added' && change.doc.id !== auth.currentUser.uid) {
+                  db.collection('users').doc(change.doc.id).get().then(uDoc => {
+                    if(uDoc.exists) {
+                      triggerNotificationUI(`${uDoc.data().name} আপনার পোস্টে লাইক দিয়েছেন!`);
+                    }
+                  });
+                }
+              });
             }
-          });
-
-          loadComments(postId);
+          } else if(btnEl) {
+            btnEl.classList.remove('text-blue-600');
+          }
         });
+
+        loadComments(postId, post.userId);
       });
     }
+
+    window.handleCommentInput = function(event, postId) {
+      const input = event.target;
+      const val = input.value;
+      const dropdown = document.getElementById(`mention-dropdown-${postId}`);
+      
+      const lastAtIndex = val.lastIndexOf('@');
+      if (lastAtIndex !== -1 && (lastAtIndex === 0 || val[lastAtIndex - 1] === ' ')) {
+        const query = val.substring(lastAtIndex + 1).toLowerCase();
+        const matchedFriends = myFriendsListCache.filter(f => f.name.toLowerCase().includes(query));
+
+        if (matchedFriends.length > 0) {
+          dropdown.innerHTML = '';
+          dropdown.classList.remove('hidden');
+          matchedFriends.forEach(friend => {
+            dropdown.innerHTML += `
+              <div onclick="selectMention('${postId}', '${friend.name}')" class="flex items-center space-x-2 p-1.5 hover:bg-blue-50 dark:hover:bg-zinc-700 rounded-lg cursor-pointer">
+                <img src="${friend.profilePic}" class="w-6 h-6 rounded-full object-cover" />
+                <span class="text-xs font-semibold">${friend.name}</span>
+              </div>
+            `;
+          });
+          return;
+        }
+      }
+      dropdown.classList.add('hidden');
+    };
+
+    window.selectMention = function(postId, friendName) {
+      const input = document.getElementById(`comment-input-${postId}`);
+      const val = input.value;
+      const lastAtIndex = val.lastIndexOf('@');
+      input.value = val.substring(0, lastAtIndex) + '@' + friendName + ' ';
+      document.getElementById(`mention-dropdown-${postId}`).classList.add('hidden');
+      input.focus();
+    };
+
+    function formatTaggedText(text) {
+      if(!text) return '';
+      return text.replace(/@([a-zA-Zবাংলাঅ-ঔক-হ\s]+)/g, '<span class="text-blue-500 font-bold">@$1</span>');
+    }
+
+    window.filterPosts = function(query) {
+      const q = query.toLowerCase().trim();
+      if(!q) {
+        renderPosts(allLoadedPosts);
+        return;
+      }
+      const filtered = allLoadedPosts.filter(p => 
+        (p.text && p.text.toLowerCase().includes(q)) || 
+        (p.userName && p.userName.toLowerCase().includes(q))
+      );
+      renderPosts(filtered);
+    };
+
+    window.clearSearch = function() {
+      document.getElementById('feed-search-input').value = '';
+      renderPosts(allLoadedPosts);
+    };
 
     window.toggleLike = function(postId) {
       const likeRef = db.collection('posts').doc(postId).collection('likes').doc(auth.currentUser.uid);
@@ -634,7 +937,34 @@
       if(box) box.classList.toggle('hidden');
     };
 
-    window.addComment = function(postId) {
+    window.setCommentReply = function(postId, commentId, userName) {
+      replyingToCommentId = commentId;
+      const indicator = document.getElementById(`comment-replying-indicator-${postId}`);
+      const textSpan = document.getElementById(`comment-replying-text`);
+      if(indicator && textSpan) {
+        indicator.classList.remove('hidden');
+        textSpan.innerText = `${userName}-কে রিপ্লাই দেওয়া হচ্ছে...`;
+      }
+    };
+
+    window.cancelCommentReply = function(postId) {
+      replyingToCommentId = null;
+      const indicator = document.getElementById(`comment-replying-indicator-${postId}`);
+      if(indicator) indicator.classList.add('hidden');
+    };
+
+    window.toggleCommentReact = function(postId, commentId) {
+      const reactRef = db.collection('posts').doc(postId).collection('comments').doc(commentId).collection('reactions').doc(auth.currentUser.uid);
+      reactRef.get().then(doc => {
+        if(doc.exists) {
+          reactRef.delete();
+        } else {
+          reactRef.set({ timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+        }
+      });
+    };
+
+    window.addComment = function(postId, postOwnerId) {
       const input = document.getElementById(`comment-input-${postId}`);
       const text = input.value.trim();
       if(!text) return;
@@ -644,13 +974,21 @@
         userName: currentUserData?.name || 'User',
         userPic: currentUserData?.profilePic || '',
         text: text,
+        replyToId: replyingToCommentId || null,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       }).then(() => {
         input.value = '';
+        cancelCommentReply(postId);
+        const dropdown = document.getElementById(`mention-dropdown-${postId}`);
+        if(dropdown) dropdown.classList.add('hidden');
+
+        if(auth.currentUser.uid !== postOwnerId) {
+          triggerNotificationUI(`${currentUserData.name} আপনার পোস্টে কমেন্ট করেছেন!`);
+        }
       });
     };
 
-    function loadComments(postId) {
+    function loadComments(postId, postOwnerId) {
       db.collection('posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
         const list = document.getElementById(`comments-list-${postId}`);
         if(!list) return;
@@ -659,12 +997,32 @@
           list.innerHTML = `<div class="text-[10px] text-gray-400">কোনো কমেন্ট নেই।</div>`;
           return;
         }
-        snap.forEach(doc => {
-          const c = doc.data();
+
+        snap.forEach(docSnap => {
+          const c = docSnap.data();
+          const commentId = docSnap.id;
+
+          db.collection('posts').doc(postId).collection('comments').doc(commentId).collection('reactions').onSnapshot(reactSnap => {
+            const reactCountEl = document.getElementById(`comment-react-count-${commentId}`);
+            if(reactCountEl) reactCountEl.innerText = reactSnap.size;
+            const reactBtnEl = document.getElementById(`comment-react-btn-${commentId}`);
+            if(reactBtnEl && reactSnap.docs.some(d => d.id === auth.currentUser.uid)) {
+              reactBtnEl.classList.add('text-blue-500', 'font-bold');
+            } else if(reactBtnEl) {
+              reactBtnEl.classList.remove('text-blue-500', 'font-bold');
+            }
+          });
+
           list.innerHTML += `
-            <div class="bg-gray-50 dark:bg-zinc-800/60 p-2 rounded-lg">
-              <span class="font-bold text-[11px] text-blue-500">${c.userName}:</span>
-              <span class="text-[11px]">${c.text}</span>
+            <div class="bg-gray-50 dark:bg-zinc-800/60 p-2 rounded-lg space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-[11px] text-blue-500 cursor-pointer hover:underline" onclick="viewUserProfile('${c.userId}')">${c.userName}:</span>
+                <div class="flex items-center space-x-2 text-[10px]">
+                  <button onclick="toggleCommentReact('${postId}', '${commentId}')" id="comment-react-btn-${commentId}" class="hover:underline">👍 লাইক (<span id="comment-react-count-${commentId}">0</span>)</button>
+                  <button onclick="setCommentReply('${postId}', '${commentId}', '${c.userName}')" class="text-gray-500 hover:underline">রিপ্লাই</button>
+                </div>
+              </div>
+              <div class="text-[11px]">${formatTaggedText(c.text)}</div>
             </div>
           `;
         });
@@ -692,57 +1050,109 @@
     };
 
     function loadRealUsersAndRequests() {
-      db.collection('users').onSnapshot(snapshot => {
-        const sugContainer = document.getElementById('friend-suggestions-list');
-        sugContainer.innerHTML = '';
+      db.collection('users').doc(auth.currentUser.uid).collection('friends').onSnapshot(friendsSnap => {
+        const friendIds = [];
+        friendsSnap.forEach(fDoc => friendIds.push(fDoc.id));
+        friendIds.push(auth.currentUser.uid);
 
-        let count = 0;
-        snapshot.forEach(docSnap => {
-          const u = docSnap.data();
-          if(u.uid !== auth.currentUser.uid) {
-            count++;
-            sugContainer.innerHTML += `
-              <div id="user-card-${u.uid}" class="flex items-center justify-between">
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="viewUserProfile('${u.uid}')">
-                  <img src="${u.profilePic}" class="w-10 h-10 rounded-full object-cover" />
-                  <div>
-                    <div class="text-xs font-bold hover:underline">${u.name}</div>
-                    <div class="text-[10px] text-gray-400">${u.email}</div>
-                  </div>
+        db.collection('users').doc(auth.currentUser.uid).collection('friendRequests').onSnapshot(reqSnap => {
+          const reqSenderIds = [];
+          reqSnap.forEach(rDoc => reqSenderIds.push(rDoc.data().senderId));
+
+          const badge = document.getElementById('friend-badge');
+          const badgeM = document.getElementById('friend-badge-m');
+          if(!reqSnap.empty) {
+            if(badge) badge.classList.remove('hidden');
+            if(badgeM) badgeM.classList.remove('hidden');
+            triggerNotificationUI("আপনার কাছে নতুন ফ্রেন্ড রিকোয়েস্ট এসেছে!");
+          } else {
+            if(badge) badge.classList.add('hidden');
+            if(badgeM) badgeM.classList.add('hidden');
+          }
+
+          db.collection('users').onSnapshot(snapshot => {
+            allLoadedSuggestions = [];
+            snapshot.forEach(docSnap => {
+              const u = docSnap.data();
+              if(!friendIds.includes(u.uid) && !reqSenderIds.includes(u.uid)) {
+                db.collection('users').doc(u.uid).collection('friendRequests').doc(auth.currentUser.uid).get().then(myReqDoc => {
+                  u.hasRequested = myReqDoc.exists;
+                  allLoadedSuggestions.push(u);
+                  renderSuggestions(allLoadedSuggestions);
+                });
+              }
+            });
+          });
+
+          const reqContainer = document.getElementById('friend-requests-list');
+          reqContainer.innerHTML = '';
+
+          if(reqSnap.empty) {
+            reqContainer.innerHTML = `<div class="text-xs text-gray-400">কোনো নতুন ফ্রেন্ড রিকোয়েস্ট নেই।</div>`;
+            return;
+          }
+
+          reqSnap.forEach(docSnap => {
+            const req = docSnap.data();
+            reqContainer.innerHTML += `
+              <div class="flex items-center justify-between p-2 bg-gray-50 dark:bg-zinc-800 rounded-xl">
+                <span class="text-xs font-bold cursor-pointer hover:underline" onclick="viewUserProfile('${req.senderId}')">${req.senderName}</span>
+                <div class="flex space-x-2">
+                  <button onclick="acceptRequest('${req.senderId}')" class="bg-blue-600 text-white text-xs px-3 py-1 rounded-xl font-bold">Accept</button>
+                  <button onclick="deleteRequest('${req.senderId}')" class="bg-gray-300 dark:bg-zinc-700 text-xs px-3 py-1 rounded-xl font-bold">Delete</button>
                 </div>
-                <button onclick="sendFriendRequest('${u.uid}', '${u.name}')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold">
-                  + Add Friend
-                </button>
               </div>
             `;
-          }
-        });
-
-        if(count === 0) {
-          sugContainer.innerHTML = `<div class="text-xs text-gray-400">ডাটাবেসে আপনি ছাড়া অন্য কোনো ইউজার নেই।</div>`;
-        }
-      });
-
-      db.collection('users').doc(auth.currentUser.uid).collection('friendRequests').onSnapshot(snapshot => {
-        const reqContainer = document.getElementById('friend-requests-list');
-        reqContainer.innerHTML = '';
-
-        if(snapshot.empty) {
-          reqContainer.innerHTML = `<div class="text-xs text-gray-400">কোনো ফ্রেন্ড রিকোয়েস্ট নেই।</div>`;
-          return;
-        }
-
-        snapshot.forEach(docSnap => {
-          const req = docSnap.data();
-          reqContainer.innerHTML += `
-            <div class="flex items-center justify-between p-2 bg-gray-50 dark:bg-zinc-800 rounded-xl">
-              <span class="text-xs font-bold cursor-pointer hover:underline" onclick="viewUserProfile('${req.senderId}')">${req.senderName}</span>
-              <button onclick="acceptRequest('${req.senderId}')" class="bg-blue-600 text-white text-xs px-3 py-1 rounded-lg">Accept</button>
-            </div>
-          `;
+          });
         });
       });
     }
+
+    function renderSuggestions(usersList) {
+      const sugContainer = document.getElementById('friend-suggestions-list');
+      sugContainer.innerHTML = '';
+
+      if(usersList.length === 0) {
+        sugContainer.innerHTML = `<div class="text-xs text-gray-400">কোনো ব্যবহারকারী পাওয়া যায়নি।</div>`;
+        return;
+      }
+
+      usersList.forEach(u => {
+        sugContainer.innerHTML += `
+          <div id="user-card-${u.uid}" class="flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="viewUserProfile('${u.uid}')">
+              <img src="${u.profilePic}" class="w-10 h-10 rounded-full object-cover" />
+              <div>
+                <div class="text-xs font-bold hover:underline">${u.name}</div>
+                <div class="text-[10px] text-gray-400">${u.email}</div>
+              </div>
+            </div>
+            ${u.hasRequested ? 
+              `<button onclick="cancelSentFriendRequest('${u.uid}')" class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Cancel</button>` :
+              `<button onclick="sendFriendRequest('${u.uid}', '${u.name}')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold">+ Add Friend</button>`
+            }
+          </div>
+        `;
+      });
+    }
+
+    window.filterSuggestions = function(query) {
+      const q = query.toLowerCase().trim();
+      if(!q) {
+        renderSuggestions(allLoadedSuggestions);
+        return;
+      }
+      const filtered = allLoadedSuggestions.filter(u => 
+        (u.name && u.name.toLowerCase().includes(q)) || 
+        (u.email && u.email.toLowerCase().includes(q))
+      );
+      renderSuggestions(filtered);
+    };
+
+    window.clearUserSearch = function() {
+      document.getElementById('user-search-input').value = '';
+      renderSuggestions(allLoadedSuggestions);
+    };
 
     window.sendFriendRequest = function(targetUid, targetName) {
       db.collection('users').doc(targetUid).collection('friendRequests').doc(auth.currentUser.uid).set({
@@ -750,47 +1160,147 @@
         senderName: currentUserData.name,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       }).then(() => {
-        alert(`${targetName} কে ফ্রেন্ড রিকোয়েস্ট পাঠানো হয়েছে!`);
+        loadRealUsersAndRequests();
       });
     };
 
     window.acceptRequest = function(senderId) {
-      db.collection('users').doc(auth.currentUser.uid).collection('friends').doc(senderId).set({
-        friendId: senderId,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        return db.collection('users').doc(auth.currentUser.uid).collection('friends').doc(auth.currentUser.uid).set({
-          friendId: auth.currentUser.uid,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      }).then(() => {
-        return db.collection('users').doc(auth.currentUser.uid).collection('friendRequests').doc(senderId).delete();
-      }).then(() => {
-        alert("ফ্রেন্ড রিকোয়েস্ট গ্রহণ করা হয়েছে!");
+      const batch = db.batch();
+      
+      const myFriendRef = db.collection('users').doc(auth.currentUser.uid).collection('friends').doc(senderId);
+      batch.set(myFriendRef, { friendId: senderId, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+
+      const theirFriendRef = db.collection('users').doc(senderId).collection('friends').doc(auth.currentUser.uid);
+      batch.set(theirFriendRef, { friendId: auth.currentUser.uid, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+
+      const reqRef = db.collection('users').doc(auth.currentUser.uid).collection('friendRequests').doc(senderId);
+      batch.delete(reqRef);
+
+      batch.commit().then(() => {
+        alert("Request Accepted");
       });
     };
 
-    function loadChatUsersList() {
-      db.collection('users').onSnapshot(snapshot => {
-        const chatUsersContainer = document.getElementById('chat-users-list');
-        chatUsersContainer.innerHTML = '';
+    window.deleteRequest = function(senderId) {
+      db.collection('users').doc(auth.currentUser.uid).collection('friendRequests').doc(senderId).delete();
+    };
 
-        snapshot.forEach(docSnap => {
-          const u = docSnap.data();
-          if(u.uid !== auth.currentUser.uid) {
+    function loadChatUsersList() {
+      const chatUsersContainer = document.getElementById('chat-users-list');
+      
+      db.collection('users').doc(auth.currentUser.uid).collection('friends').onSnapshot(friendsSnap => {
+        db.collection('groups').where('members', 'array-contains', auth.currentUser.uid).onSnapshot(groupsSnap => {
+          chatUsersContainer.innerHTML = `
+            <div class="mb-2 pb-2 border-b border-gray-300/50 dark:border-zinc-800">
+              <button onclick="openGroupModal()" class="w-full bg-[#00a884]/10 dark:bg-zinc-800 text-[#00a884] dark:text-emerald-400 font-bold text-[11px] py-2 rounded-xl border border-[#00a884]/20 dark:border-zinc-700 flex items-center justify-center space-x-1 transition hover:bg-[#00a884]/20">
+                <span>+ গ্রুপ তৈরি করুন</span>
+              </button>
+            </div>
+          `;
+
+          if(friendsSnap.empty && groupsSnap.empty) {
+            chatUsersContainer.innerHTML += `<div class="text-[11px] text-gray-400 text-center py-4">আপনার কোনো ফ্রেন্ড বা গ্রুপ নেই।</div>`;
+            return;
+          }
+
+          groupsSnap.forEach(gDoc => {
+            const group = gDoc.data();
+            const groupPic = group.groupPic || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(group.groupName) + '&background=00a884&color=fff');
             chatUsersContainer.innerHTML += `
-              <div onclick="openChatWith('${u.uid}', '${u.name}', '${u.profilePic}')" class="p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-xl cursor-pointer flex items-center space-x-2">
-                <img src="${u.profilePic}" class="w-8 h-8 rounded-full object-cover" />
-                <div class="truncate text-xs font-semibold">${u.name}</div>
+              <div id="chat-group-item-${gDoc.id}" onclick="openChatGroup('${gDoc.id}')" class="p-2.5 hover:bg-gray-200/60 dark:hover:bg-zinc-800 rounded-xl cursor-pointer flex items-center justify-between space-x-2 transition">
+                <div class="flex items-center space-x-2.5 truncate">
+                  <img src="${groupPic}" class="w-9 h-9 rounded-full object-cover border border-emerald-500 shadow-sm" />
+                  <div class="truncate text-xs font-semibold dark:text-gray-200">${group.groupName} <span class="text-[9px] text-gray-500">(গ্রুপ)</span></div>
+                </div>
               </div>
             `;
-          }
+          });
+
+          friendsSnap.forEach(fDoc => {
+            const friendId = fDoc.id;
+            db.collection('users').doc(friendId).get().then(userDoc => {
+              if(userDoc.exists) {
+                const u = userDoc.data();
+                const chatId = [auth.currentUser.uid, friendId].sort().join('_');
+                
+                db.collection('chats').doc(chatId).collection('messages').orderBy('timestamp', 'desc').onSnapshot(mSnap => {
+                  let unreadCount = 0;
+                  mSnap.forEach(mDoc => {
+                    const mData = mDoc.data();
+                    if(mData.senderId !== auth.currentUser.uid && (!mData.seenBy || !mData.seenBy.includes(auth.currentUser.uid))) {
+                      unreadCount++;
+                    }
+                  });
+
+                  const unreadBadgeEl = document.getElementById(`unread-count-${u.uid}`);
+                  if(unreadBadgeEl) {
+                    if(unreadCount > 0) {
+                      unreadBadgeEl.innerText = unreadCount;
+                      unreadBadgeEl.classList.remove('hidden');
+                    } else {
+                      unreadBadgeEl.classList.add('hidden');
+                    }
+                  } else {
+                    setTimeout(() => {
+                      const badgeInit = document.getElementById(`unread-count-${u.uid}`);
+                      if(badgeInit && unreadCount > 0) {
+                        badgeInit.innerText = unreadCount;
+                        badgeInit.classList.remove('hidden');
+                      }
+                    }, 300);
+                  }
+                });
+              
+                chatUsersContainer.innerHTML += `
+                  <div id="chat-user-item-${u.uid}" onclick="openChatWith('${u.uid}', '${u.name}', '${u.profilePic}')" class="p-2.5 hover:bg-gray-200/60 dark:hover:bg-zinc-800 rounded-xl cursor-pointer flex items-center justify-between space-x-2 transition">
+                    <div class="flex items-center space-x-2.5 truncate">
+                      <img src="${u.profilePic}" class="w-9 h-9 rounded-full object-cover border border-gray-300 dark:border-zinc-700" />
+                      <div class="truncate text-xs font-semibold dark:text-gray-200">${u.name}</div>
+                    </div>
+                    <span id="unread-count-${u.uid}" class="hidden bg-[#00a884] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">0</span>
+                  </div>
+                `;
+              }
+            });
+          });
         });
       });
     }
 
+    window.openGroupModal = function() {
+      document.getElementById('create-group-modal').classList.remove('hidden');
+    };
+
+    window.closeGroupModal = function() {
+      document.getElementById('create-group-modal').classList.add('hidden');
+    };
+
+    window.createChatGroup = function() {
+      const gName = document.getElementById('group-name-input').value.trim();
+      if(!gName) {
+        alert('গ্রুপের নাম লিখুন!');
+        return;
+      }
+
+      db.collection('groups').add({
+        groupName: gName,
+        admin: auth.currentUser.uid,
+        members: [auth.currentUser.uid],
+        groupPic: '',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert('গ্রুপ সফলভাবে তৈরি হয়েছে!');
+        document.getElementById('group-name-input').value = '';
+        closeGroupModal();
+      });
+    };
+
     window.openChatWith = function(uid, name, pic) {
-      selectedChatUserId = uid;
+      selectedChatTargetId = uid;
+      isGroupChatTarget = false;
+      currentSelectedGroupData = null;
+      document.getElementById('group-header-actions').classList.add('hidden');
+
       const targetName = document.getElementById('chat-target-name');
       const targetImg = document.getElementById('chat-target-img');
       
@@ -800,7 +1310,126 @@
       targetImg.onclick = () => viewUserProfile(uid);
       
       document.getElementById('chat-target-status').innerText = "অনলাইন";
+
       loadRealMessages();
+    };
+
+    window.openChatGroup = function(groupId) {
+      selectedChatTargetId = groupId;
+      isGroupChatTarget = true;
+      document.getElementById('group-header-actions').classList.remove('hidden');
+
+      db.collection('groups').doc(groupId).onSnapshot(docSnap => {
+        if(docSnap.exists) {
+          currentSelectedGroupData = docSnap.data();
+          if(selectedChatTargetId === groupId) {
+            const groupName = currentSelectedGroupData.groupName;
+            const groupPic = currentSelectedGroupData.groupPic || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(groupName) + '&background=00a884&color=fff');
+            
+            const targetName = document.getElementById('chat-target-name');
+            const targetImg = document.getElementById('chat-target-img');
+            
+            targetName.innerText = groupName + ' (গ্রুপ চ্যাট)';
+            targetImg.src = groupPic;
+            targetName.onclick = null;
+            targetImg.onclick = null;
+            
+            document.getElementById('chat-target-status').innerText = `মেম্বার সংখ্যা: ${currentSelectedGroupData.members.length}`;
+          }
+        }
+      });
+
+      loadRealMessages();
+    };
+
+    window.openGroupSettingsModal = function() {
+      if(!currentSelectedGroupData) return;
+      
+      const modal = document.getElementById('group-settings-modal');
+      modal.classList.remove('hidden');
+      document.getElementById('settings-group-name-input').value = currentSelectedGroupData.groupName;
+      groupSettingsImageBase64 = currentSelectedGroupData.groupPic || '';
+
+      const isAdmin = currentSelectedGroupData.admin === auth.currentUser.uid;
+      const adminSection = document.getElementById('admin-only-settings');
+      
+      if(isAdmin) {
+        adminSection.classList.remove('hidden');
+        // Load friends list to add to group
+        const addListContainer = document.getElementById('group-add-friends-list');
+        addListContainer.innerHTML = '';
+
+        if(myFriendsListCache.length === 0) {
+          addListContainer.innerHTML = `<div class="text-[10px] text-gray-400">যোগ করার মতো কোনো ফ্রেন্ড নেই।</div>`;
+        } else {
+          myFriendsListCache.forEach(friend => {
+            const alreadyMember = currentSelectedGroupData.members.includes(friend.uid);
+            addListContainer.innerHTML += `
+              <div class="flex items-center justify-between bg-gray-50 dark:bg-zinc-800 p-2 rounded-xl">
+                <div class="flex items-center space-x-2">
+                  <img src="${friend.profilePic}" class="w-6 h-6 rounded-full object-cover" />
+                  <span class="text-xs font-semibold">${friend.name}</span>
+                </div>
+                ${alreadyMember ? 
+                  '<span class="text-[10px] text-green-500 font-bold">Already Added</span>' : 
+                  `<button onclick="addFriendToGroup('${friend.uid}')" class="bg-blue-600 text-white text-[10px] px-2 py-1 rounded-lg font-bold">Add</button>`
+                }
+              </div>
+            `;
+          });
+        }
+      } else {
+        adminSection.classList.add('hidden');
+      }
+    };
+
+    window.closeGroupSettingsModal = function() {
+      document.getElementById('group-settings-modal').classList.add('hidden');
+    };
+
+    window.saveGroupInfoChanges = function() {
+      if(!currentSelectedGroupData || currentSelectedGroupData.admin !== auth.currentUser.uid) return;
+      const newName = document.getElementById('settings-group-name-input').value.trim();
+      if(!newName) {
+        alert('নাম দেওয়া আবশ্যক!');
+        return;
+      }
+
+      db.collection('groups').doc(selectedChatTargetId).update({
+        groupName: newName,
+        groupPic: groupSettingsImageBase64 || currentSelectedGroupData.groupPic || ''
+      }).then(() => {
+        alert('গ্রুপের তথ্য আপডেট হয়েছে!');
+        closeGroupSettingsModal();
+      });
+    };
+
+    window.addFriendToGroup = function(friendUid) {
+      if(!currentSelectedGroupData || currentSelectedGroupData.admin !== auth.currentUser.uid) return;
+
+      db.collection('groups').doc(selectedChatTargetId).update({
+        members: firebase.firestore.FieldValue.arrayUnion(friendUid)
+      }).then(() => {
+        alert('ফ্রেন্ডকে গ্রুপে সফলভাবে যুক্ত করা হয়েছে!');
+        openGroupSettingsModal(); // Refresh list
+      });
+    };
+
+    window.leaveCurrentGroup = function() {
+      if(!currentSelectedGroupData || !selectedChatTargetId) return;
+
+      if(confirm('আপনি কি সত্যিই এই গ্রুপ থেকে লেভ নিতে চান?')) {
+        db.collection('groups').doc(selectedChatTargetId).update({
+          members: firebase.firestore.FieldValue.arrayRemove(auth.currentUser.uid)
+        }).then(() => {
+          alert('আপনি গ্রুপ থেকে সফলভাবে লিভ নিয়েছেন।');
+          selectedChatTargetId = null;
+          isGroupChatTarget = false;
+          document.getElementById('group-header-actions').classList.add('hidden');
+          document.getElementById('chat-target-name').innerText = 'চ্যাট সিলেক্ট করুন';
+          document.getElementById('chat-messages-box').innerHTML = `<div class="text-xs text-center text-gray-500 dark:text-gray-400 mt-10 bg-white/60 dark:bg-zinc-800/60 py-3 px-4 rounded-xl shadow-sm mx-auto max-w-xs">মেসেজ আদান-প্রদান করতে কোনো ফ্রেন্ড বা গ্রুপ নির্বাচন করুন।</div>`;
+        });
+      }
     };
 
     window.setReplyTo = function(msgText) {
@@ -817,27 +1446,46 @@
     };
 
     function loadRealMessages() {
-      if(!selectedChatUserId) return;
+      if(!selectedChatTargetId) return;
 
-      const chatId = [auth.currentUser.uid, selectedChatUserId].sort().join('_');
+      const pathRef = isGroupChatTarget ? 
+        db.collection('groups').doc(selectedChatTargetId).collection('messages') :
+        db.collection('chats').doc([auth.currentUser.uid, selectedChatTargetId].sort().join('_')).collection('messages');
       
-      db.collection('chats').doc(chatId).collection('messages').orderBy('timestamp', 'asc').onSnapshot(snapshot => {
+      pathRef.orderBy('timestamp', 'asc').onSnapshot(snapshot => {
         const msgBox = document.getElementById('chat-messages-box');
         msgBox.innerHTML = '';
 
         if(snapshot.empty) {
-          msgBox.innerHTML = `<div class="text-xs text-center text-gray-400 mt-5">মেসেজ পাঠিয়ে চ্যাট শুরু করুন!</div>`;
+          msgBox.innerHTML = `<div class="text-xs text-center text-gray-500 dark:text-gray-400 mt-5 bg-white/70 dark:bg-zinc-800/70 py-2.5 px-4 rounded-xl shadow-sm mx-auto max-w-xs">মেসেজ পাঠিয়ে চ্যাট শুরু করুন!</div>`;
           return;
         }
+
+        let hasNewIncoming = false;
 
         snapshot.forEach(docSnap => {
           const msg = docSnap.data();
           const isMe = msg.senderId === auth.currentUser.uid;
 
+          if(!isMe && !isGroupChatTarget && selectedChatTargetId !== msg.senderId) {
+            hasNewIncoming = true;
+          }
+
+          if(!isMe && (!msg.seenBy || !msg.seenBy.includes(auth.currentUser.uid))) {
+            docSnap.ref.update({
+              seenBy: firebase.firestore.FieldValue.arrayUnion(auth.currentUser.uid)
+            });
+          }
+
+          const bubbleClasses = isMe 
+            ? 'bg-[#d9fdd3] dark:bg-[#005c4b] text-gray-900 dark:text-gray-100 rounded-tr-none shadow-sm' 
+            : 'bg-white dark:bg-[#202c33] text-gray-900 dark:text-gray-100 rounded-tl-none shadow-sm';
+
           msgBox.innerHTML += `
-            <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} space-y-1">
-              <div class="group relative ${isMe ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-zinc-800 text-gray-800 dark:text-gray-200'} p-2.5 rounded-2xl text-xs max-w-[80%] space-y-1">
-                ${msg.replyTo ? `<div class="bg-black/20 dark:bg-white/10 p-1.5 rounded-lg text-[10px] mb-1 border-l-2 border-white">রিপ্লাই: ${msg.replyTo}</div>` : ''}
+            <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} space-y-1 my-1">
+              <div class="group relative ${bubbleClasses} p-2.5 rounded-2xl text-xs max-w-[85%] sm:max-w-[70%] space-y-1">
+                ${msg.senderName && isGroupChatTarget && !isMe ? `<div class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">${msg.senderName}</div>` : ''}
+                ${msg.replyTo ? `<div class="bg-black/10 dark:bg-white/10 p-1.5 rounded-lg text-[10px] mb-1 border-l-2 border-emerald-500">রিপ্লাই: ${msg.replyTo}</div>` : ''}
                 ${msg.image ? `<div class="space-y-1"><img src="${msg.image}" class="w-full rounded-xl max-h-48 object-cover" /><a href="${msg.image}" target="_blank" download class="block text-[10px] underline text-right opacity-80">ডাউনলোড ছবি</a></div>` : ''}
                 ${msg.text ? `<div>${msg.text}</div>` : ''}
                 
@@ -846,6 +1494,18 @@
             </div>
           `;
         });
+
+        const chatBadge = document.getElementById('chat-badge');
+        const chatBadgeM = document.getElementById('chat-badge-m');
+        if(hasNewIncoming) {
+          if(chatBadge) chatBadge.classList.remove('hidden');
+          if(chatBadgeM) chatBadgeM.classList.remove('hidden');
+          triggerNotificationUI("আপনার কাছে নতুন মেসেজ এসেছে!");
+        } else {
+          if(chatBadge) chatBadge.classList.add('hidden');
+          if(chatBadgeM) chatBadgeM.classList.add('hidden');
+        }
+
         msgBox.scrollTop = msgBox.scrollHeight;
       });
     }
@@ -854,15 +1514,19 @@
       const input = document.getElementById('chat-input-field');
       const text = input.value.trim();
 
-      if((!text && !chatImageBase64) || !selectedChatUserId) return;
+      if((!text && !chatImageBase64) || !selectedChatTargetId) return;
 
-      const chatId = [auth.currentUser.uid, selectedChatUserId].sort().join('_');
+      const pathRef = isGroupChatTarget ? 
+        db.collection('groups').doc(selectedChatTargetId).collection('messages') :
+        db.collection('chats').doc([auth.currentUser.uid, selectedChatTargetId].sort().join('_')).collection('messages');
 
-      db.collection('chats').doc(chatId).collection('messages').add({
+      pathRef.add({
         senderId: auth.currentUser.uid,
+        senderName: currentUserData?.name || 'User',
         text: text,
         image: chatImageBase64 || '',
         replyTo: replyingToMessage || null,
+        seenBy: [auth.currentUser.uid],
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       }).then(() => {
         input.value = '';
@@ -870,6 +1534,9 @@
         document.getElementById('chat-file-label').innerText = "ছবি যুক্ত করুন";
         chatImageBase64 = '';
         cancelReply();
+        
+        const msgBox = document.getElementById('chat-messages-box');
+        msgBox.scrollTop = msgBox.scrollHeight;
       });
     });
   </script>
