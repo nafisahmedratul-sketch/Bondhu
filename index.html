@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bondu - Realtime Social Network</title>
+  <title>বন্ধু</title>
   
   <script src="https://cdn.jsdelivr.net/npm/tailwindcss5"></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -34,9 +34,9 @@
   <div id="auth-screen" class="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-black dark:to-zinc-900">
     <div class="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-2xl border border-gray-200 dark:border-zinc-800 transition-all">
       <div class="text-center mb-6">
-        <p class="text-[11px] font-bold text-blue-500 mb-2 tracking-wide uppercase">Developer: Nafis Ahmed Ratul[cite: 1]</p>
-        <h1 class="text-5xl font-black text-blue-600 tracking-tight mb-2">Bondu[cite: 1]</h1>
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">আপনার সামাজিক মাধ্যম[cite: 1]</p>
+        <p class="text-[11px] font-bold text-blue-500 mb-2 tracking-wide uppercase">Developer: Nafis Ahmed Ratu</p>
+        <h1 class="text-5xl font-black text-blue-600 tracking-tight mb-2">বন্ধু</h1>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">আপনার সামাজিক যোগাযোগ মাধ্যম</p>
       </div>
 
       <div id="auth-error" class="hidden bg-red-50 border border-red-200 text-red-600 text-xs p-3 rounded-xl mb-4 text-center font-medium"></div>
@@ -82,7 +82,7 @@
   <div id="app-screen" class="hidden min-h-screen pb-20 sm:pb-6">
     
     <nav class="fixed top-0 left-0 w-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-gray-200 dark:border-zinc-800 z-40 px-4 py-2.5 flex items-center justify-between">
-      <span class="text-2xl font-black text-blue-600 cursor-pointer select-none" onclick="switchTab('home')">Bondu[cite: 1]</span>
+      <span class="text-2xl font-black text-blue-600 cursor-pointer select-none" onclick="switchTab('home')">বন্ধু</span>
 
       <div class="hidden sm:flex items-center space-x-2">
         <button onclick="switchTab('home')" class="nav-btn nav-btn-home px-4 py-2 rounded-xl text-blue-600 font-semibold relative">
@@ -184,8 +184,8 @@
               <button onclick="backToChatList()" id="chat-back-btn" class="sm:hidden text-gray-600 dark:text-gray-300 p-1 rounded-lg bg-gray-200 dark:bg-zinc-800 text-xs font-bold px-2">← তালিকা</button>
               <img id="chat-target-img" src="https://via.placeholder.com/150" class="w-9 h-9 rounded-full object-cover cursor-pointer border border-gray-300 dark:border-zinc-700" />
               <div>
-                <div id="chat-target-name" class="text-xs font-bold cursor-pointer dark:text-white">চ্যাট সিলেক্ট করুন[cite: 1]</div>
-                <div id="chat-target-status" class="text-[10px] text-gray-500 dark:text-gray-400">মেসেজ করতে নিচে তালিকা থেকে ফ্রেন্ড বা গ্রুপ নির্বাচন করুন[cite: 1]</div>
+                <div id="chat-target-name" class="text-xs font-bold cursor-pointer dark:text-white">চ্যাট সিলেক্ট করুন</div>
+                <div id="chat-target-status" class="text-[10px] text-gray-500 dark:text-gray-400">মেসেজ করতে নিচে তালিকা থেকে ফ্রেন্ড বা গ্রুপ নির্বাচন করুন</div>
               </div>
             </div>
             <!-- Group Settings Extra Buttons Area -->
@@ -208,7 +208,7 @@
               
               <!-- Messages Scrollable Container -->
               <div id="chat-messages-box" class="p-4 space-y-3 overflow-y-auto flex-1 scroll-smooth w-full min-h-0">
-                <div class="text-xs text-center text-gray-500 dark:text-gray-400 mt-10 bg-white/60 dark:bg-zinc-800/60 py-3 px-4 rounded-xl shadow-sm mx-auto max-w-xs">মেসেজ আদান-প্রদান করতে কোনো ফ্রেন্ড বা গ্রুপ নির্বাচন করুন।[cite: 1]</div>
+                <div class="text-xs text-center text-gray-500 dark:text-gray-400 mt-10 bg-white/60 dark:bg-zinc-800/60 py-3 px-4 rounded-xl shadow-sm mx-auto max-w-xs">মেসেজ আদান-প্রদান করতে কোনো ফ্রেন্ড বা গ্রুপ নির্বাচন করুন।</div>
               </div>
 
               <!-- Reply Preview Section -->
@@ -533,7 +533,7 @@
           uid: res.user.uid,
           name: name,
           email: email,
-          bio: 'Bondu-তে নতুন যুক্ত হয়েছি!',
+          bio: 'বন্ধুতে-তে নতুন যুক্ত হয়েছি!',
           profilePic: defaultPic
         });
       }).catch(err => showError(err.message));
