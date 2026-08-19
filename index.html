@@ -34,7 +34,7 @@
   <div id="auth-screen" class="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-black dark:to-zinc-900">
     <div class="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-2xl border border-gray-200 dark:border-zinc-800 transition-all">
       <div class="text-center mb-6">
-        <p class="text-[11px] font-bold text-blue-500 mb-2 tracking-wide uppercase">Developer: Nafis Ahmed Ratu</p>
+        <p class="text-[11px] font-bold text-blue-500 mb-2 tracking-wide uppercase">Developer: Nafis Ahmed Ratul</p>
         <h1 class="text-5xl font-black text-blue-600 tracking-tight mb-2">বন্ধু</h1>
         <p class="text-xs font-medium text-gray-500 dark:text-gray-400">আপনার সামাজিক যোগাযোগ মাধ্যম</p>
       </div>
@@ -266,7 +266,7 @@
           
           <p id="profile-bio-text" class="text-xs italic text-gray-600 dark:text-gray-300 mt-2 bg-gray-50 dark:bg-zinc-800/50 p-2.5 rounded-xl border dark:border-zinc-800">বায়ো যুক্ত করা হয়নি...</p>
 
-          <p id="profile-friends-count" class="text-xs font-bold text-blue-600 mt-3">মোট ফ্রেন্ড: 0</p>
+          <p id="profile-friends-count" onclick="openMyFriendsModal()" class="text-xs font-bold text-blue-600 mt-3 cursor-pointer hover:underline inline-block">মোট ফ্রেন্ড: 0</p>
 
           <div id="edit-profile-box" class="hidden mt-5 pt-4 border-t dark:border-zinc-800 space-y-3">
             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">প্রোফাইল আপডেট করুন</h3>
@@ -339,6 +339,21 @@
         <h4 class="text-xs font-bold text-gray-500 mb-2">ব্যবহারকারীর পোস্টসমূহ</h4>
         <div id="modal-user-posts" class="space-y-3">
           <div class="text-xs text-gray-400 text-center py-4">পোস্ট লোড হচ্ছে...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MY FRIENDS LIST MODAL -->
+    <div id="my-friends-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-zinc-900 w-full max-w-sm rounded-3xl p-5 border border-gray-200 dark:border-zinc-800 shadow-2xl relative max-h-[85vh] overflow-y-auto space-y-3">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-sm font-bold">আমার ফ্রেন্ড লিস্ট</h3>
+          <button onclick="closeMyFriendsModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-white p-1">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <div id="my-friends-modal-list" class="space-y-2">
+          <div class="text-xs text-gray-400 text-center py-4">লোড হচ্ছে...</div>
         </div>
       </div>
     </div>
@@ -621,6 +636,42 @@
         alert('সমস্যা হয়েছে: ' + err.message);
       });
     });
+
+    window.openMyFriendsModal = function() {
+      const modal = document.getElementById('my-friends-modal');
+      const listContainer = document.getElementById('my-friends-modal-list');
+      modal.classList.remove('hidden');
+      listContainer.innerHTML = '<div class="text-xs text-gray-400 text-center py-4">লোড হচ্ছে...</div>';
+
+      db.collection('users').doc(auth.currentUser.uid).collection('friends').get().then(snapshot => {
+        listContainer.innerHTML = '';
+        if(snapshot.empty) {
+          listContainer.innerHTML = '<div class="text-xs text-gray-400 text-center py-4">আপনার কোনো ফ্রেন্ড নেই।</div>';
+          return;
+        }
+
+        snapshot.forEach(fDoc => {
+          db.collection('users').doc(fDoc.id).get().then(uDoc => {
+            if(uDoc.exists) {
+              const u = uDoc.data();
+              listContainer.innerHTML += `
+                <div onclick="closeMyFriendsModal(); viewUserProfile('${u.uid}')" class="flex items-center space-x-3 p-2 bg-gray-50 dark:bg-zinc-800 rounded-xl cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-700">
+                  <img src="${u.profilePic || 'https://via.placeholder.com/150'}" class="w-9 h-9 rounded-full object-cover" />
+                  <div>
+                    <div class="text-xs font-bold">${u.name}</div>
+                    <div class="text-[10px] text-gray-400">${u.email}</div>
+                  </div>
+                </div>
+              `;
+            }
+          });
+        });
+      });
+    };
+
+    window.closeMyFriendsModal = function() {
+      document.getElementById('my-friends-modal').classList.add('hidden');
+    };
 
     window.viewUserProfile = function(targetUid) {
       if(targetUid === auth.currentUser.uid) {
