@@ -175,10 +175,10 @@
 
       <!-- TAB 3: CHAT ROOM (WhatsApp Style Flex & Scroll Fixed Layout) -->
       <section id="tab-chat" class="tab-content hidden">
-        <div class="bg-[#efeae2] dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 h-[82vh] sm:h-[80vh] flex flex-col overflow-hidden relative">
+        <div class="bg-[#efeae2] dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 h-[78vh] sm:h-[80vh] flex flex-col overflow-hidden relative">
           
           <!-- Chat Header -->
-          <div class="p-3 border-b border-gray-300/50 dark:border-zinc-800 flex items-center justify-between bg-[#f0f2f5] dark:bg-zinc-900 z-10 flex-shrink-0">
+          <div class="p-3 border-b border-gray-300/50 dark:border-zinc-800 flex items-center justify-between bg-[#f0f2f5] dark:bg-zinc-900 z-30 flex-shrink-0">
             <div class="flex items-center space-x-2 sm:space-x-3">
               <!-- Mobile Back Button to Chat List -->
               <button onclick="backToChatList()" id="chat-back-btn" class="sm:hidden text-gray-600 dark:text-gray-300 p-1 rounded-lg bg-gray-200 dark:bg-zinc-800 text-xs font-bold px-2">← তালিকা</button>
@@ -196,7 +196,7 @@
           </div>
 
           <!-- Chat Body Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 flex-1 overflow-hidden h-full relative">
+          <div class="grid grid-cols-1 sm:grid-cols-3 flex-1 overflow-hidden relative min-h-0">
             
             <!-- Sidebar: Friends/Groups List -->
             <div id="chat-users-list" class="col-span-1 border-r border-gray-300/50 dark:border-zinc-800 overflow-y-auto p-2 space-y-1 bg-white/90 dark:bg-zinc-900/90 h-full absolute sm:relative inset-0 z-20 transition-all">
@@ -204,21 +204,21 @@
             </div>
 
             <!-- Chat Conversation Area (WhatsApp Theme & Scroll Layout) -->
-            <div id="chat-conversation-pane" class="hidden sm:flex col-span-1 sm:col-span-2 flex-col h-full bg-[radial-gradient(#e5ddd5_1px,transparent_1px)] dark:bg-[radial-gradient(#182229_1px,transparent_1px)] [background-size:16px_16px] bg-[#efeae2] dark:bg-[#0b141a] relative overflow-hidden absolute sm:relative inset-0 z-20">
+            <div id="chat-conversation-pane" class="hidden sm:flex col-span-1 sm:col-span-2 flex-col h-full bg-[radial-gradient(#e5ddd5_1px,transparent_1px)] dark:bg-[radial-gradient(#182229_1px,transparent_1px)] [background-size:16px_16px] bg-[#efeae2] dark:bg-[#0b141a] absolute sm:relative inset-0 z-20 overflow-hidden">
               
               <!-- Messages Scrollable Container -->
-              <div id="chat-messages-box" class="p-4 space-y-3 overflow-y-auto flex-1 scroll-smooth w-full">
+              <div id="chat-messages-box" class="p-4 space-y-3 overflow-y-auto flex-1 scroll-smooth w-full min-h-0">
                 <div class="text-xs text-center text-gray-500 dark:text-gray-400 mt-10 bg-white/60 dark:bg-zinc-800/60 py-3 px-4 rounded-xl shadow-sm mx-auto max-w-xs">মেসেজ আদান-প্রদান করতে কোনো ফ্রেন্ড বা গ্রুপ নির্বাচন করুন।[cite: 1]</div>
               </div>
 
               <!-- Reply Preview Section -->
-              <div id="reply-preview-container" class="hidden px-3 py-1.5 bg-[#f0f2f5] dark:bg-zinc-800 border-t border-gray-300 dark:border-zinc-700 flex justify-between items-center text-xs flex-shrink-0">
+              <div id="reply-preview-container" class="hidden px-3 py-1.5 bg-[#f0f2f5] dark:bg-zinc-800 border-t border-gray-300 dark:border-zinc-700 flex justify-between items-center text-xs flex-shrink-0 z-30">
                 <div class="truncate text-gray-600 dark:text-gray-300" id="reply-preview-text">রিপ্লাই...</div>
                 <button onclick="cancelReply()" class="text-red-500 font-bold ml-2">✕</button>
               </div>
 
               <!-- WhatsApp Style Fixed Input Footer Area -->
-              <div class="p-2.5 border-t border-gray-300/60 dark:border-zinc-800 bg-[#f0f2f5] dark:bg-zinc-900 space-y-2 flex-shrink-0 z-20 shadow-lg">
+              <div class="p-2.5 border-t border-gray-300/60 dark:border-zinc-800 bg-[#f0f2f5] dark:bg-zinc-900 space-y-2 flex-shrink-0 z-30 shadow-lg">
                 <div class="flex items-center space-x-2">
                   <label class="cursor-pointer bg-white dark:bg-zinc-800 hover:bg-gray-100 text-gray-700 dark:text-gray-300 text-[10px] px-2.5 py-1 rounded-lg border border-gray-300 dark:border-zinc-700 flex items-center space-x-1 shadow-sm">
                     <i data-lucide="image" class="w-3 h-3 text-emerald-600"></i>
@@ -1317,6 +1317,7 @@
       if(window.innerWidth < 640) {
         document.getElementById('chat-users-list').classList.add('hidden');
         document.getElementById('chat-conversation-pane').classList.remove('hidden');
+        document.getElementById('chat-conversation-pane').classList.add('flex');
       }
 
       loadRealMessages();
@@ -1351,6 +1352,7 @@
       if(window.innerWidth < 640) {
         document.getElementById('chat-users-list').classList.add('hidden');
         document.getElementById('chat-conversation-pane').classList.remove('hidden');
+        document.getElementById('chat-conversation-pane').classList.add('flex');
       }
 
       loadRealMessages();
@@ -1360,6 +1362,7 @@
       if(window.innerWidth < 640) {
         document.getElementById('chat-users-list').classList.remove('hidden');
         document.getElementById('chat-conversation-pane').classList.add('hidden');
+        document.getElementById('chat-conversation-pane').classList.remove('flex');
       }
     };
 
