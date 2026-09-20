@@ -1,1620 +1,419 @@
 <!DOCTYPE html>
-<html lang="bn" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>বন্ধু</title>
-  
-  <script src="https://cdn.jsdelivr.net/npm/tailwindcss5"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' }
-          }
-        }
-      }
-    }
-  </script>
-  
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- Firebase Compat CDN -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SR. - Final Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box} body{background:#050507;color:#fff;font-family:'Hind Siliguri',sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:'Space Grotesk'} #bg3d{position:fixed;inset:0;z-index:-2}
+header{position:fixed;top:12px;left:50%;transform:translateX(-50%);width:96%;max-width:1150px;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;background:rgba(255,255,255,0.06);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,0.12);border-radius:100px;z-index:100}
+.logo{font-weight:800} .logo span{color:#8b5cf6}
+nav{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none} .nav-btn{padding:8px 14px;border-radius:100px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#a1a1aa;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap} .nav-btn.active{background:#fff;color:#000}
+.page{display:none;min-height:100vh;padding:90px 5% 50px} .page.active{display:block}
+.hero{max-width:1000px;margin:0 auto;text-align:center}
+.profile-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;margin:30px auto}
+@media(min-width:800px){.profile-wrap{flex-direction:row;text-align:left;justify-content:center;gap:40px}}
+.profile-img-box{position:relative;width:220px;height:220px;border-radius:50%;padding:6px;background:linear-gradient(135deg,#8b5cf6,#06b6d4,#8b5cf6);animation:rotateBorder 4s linear infinite;box-shadow:0 0 50px rgba(139,92,246,0.5)}
+@keyframes rotateBorder{0%{box-shadow:0 0 30px rgba(139,92,246,0.5)}50%{box-shadow:0 0 60px rgba(6,182,212,0.8)}100%{box-shadow:0 0 30px rgba(139,92,246,0.5)}}
+.profile-img-box img{width:100%;height:100%;object-fit:cover;border-radius:50%;border:4px solid #050507;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.profile-info h1{font-size:clamp(36px,6vw,64px);line-height:0.9} .profile-info h1 span{background:linear-gradient(90deg,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.profile-info .role{color:#8b5cf6;font-weight:700;letter-spacing:2px;font-size:12px;margin:10px 0} .profile-info .bio{color:#a1a1aa;max-width:500px;line-height:1.6;font-size:15px}
+.grid-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:35px}
+.btn3d{padding:16px;border-radius:18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);cursor:pointer;text-align:center;transition:0.3s} .btn3d:hover{transform:translateY(-5px);border-color:#8b5cf6}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:20px} .card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px} @media(min-width:700px){.stat-grid{grid-template-columns:repeat(4,1fr)}}
+.stat{background:rgba(255,255,255,0.05);border-radius:18px;padding:20px;text-align:center} .stat h3{font-size:30px;color:#8b5cf6}
+.social-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:20px}
+.social-btn{display:flex;align-items:center;gap:8px;padding:14px 18px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#fff;text-decoration:none;font-weight:700;font-size:13px;transition:0.3s} .social-btn:hover{transform:translateY(-4px);border-color:var(--c);box-shadow:0 10px 30px rgba(139,92,246,0.2)}
+input,textarea,select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;margin-bottom:10px;outline:none}
+select option{background:#0a0a0f;color:#fff}
+.btn-send{width:100%;padding:12px;border-radius:12px;border:none;background:#fff;color:#000;font-weight:800;cursor:pointer}
+#toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,150px);background:#fff;color:#000;padding:12px 20px;border-radius:12px;font-weight:800;transition:0.4s;z-index:9999}
+#editFloatBtn{position:fixed;bottom:25px;right:20px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#06b6d4);border:none;color:#fff;font-size:22px;cursor:pointer;z-index:90;box-shadow:0 10px 30px rgba(139,92,246,0.5)}
+#adminLogin,#adminPanel{display:none;position:fixed;inset:0;z-index:200;padding:15px} #adminLogin{background:rgba(0,0,0,0.85);backdrop-filter:blur(20px);align-items:center;justify-content:center} #adminPanel{background:#0a0a0f;overflow:auto;align-items:flex-start}
+.admin-box{max-width:850px;width:100%;margin:0 auto;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:18px}
+.edit-group{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px;margin-bottom:14px} .edit-group h4{color:#8b5cf6;margin-bottom:10px;font-size:13px} .small-btn{padding:6px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;font-size:11px;cursor:pointer;margin:3px}
+.file-card{display:flex;flex-direction:column;justify-content:space-between;gap:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:16px}
+.file-card-type{display:inline-block;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700;text-transform:uppercase;background:rgba(139,92,246,0.2);color:#8b5cf6;margin-bottom:8px}
+.file-link-btn{display:inline-block;padding:8px 12px;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff;text-decoration:none;font-weight:700;font-size:12px;text-align:center;margin-top:8px}
+/* Storage File Upload Control UI Elements */
+.upload-btn-label{display:inline-block;padding:8px 14px;border-radius:10px;background:rgba(139,92,246,0.3);border:1px dashed #8b5cf6;color:#fff;font-size:12px;font-weight:700;cursor:pointer;transition:0.3s;margin-bottom:8px}
+.upload-btn-label:hover{background:rgba(139,92,246,0.5)}
+.upload-progress{font-size:11px;color:#06b6d4;margin-bottom:8px;display:none}
+</style>
 </head>
-<body class="bg-gray-100 dark:bg-black text-gray-900 dark:text-gray-100 font-sans min-h-screen">
+<body>
+<canvas id="bg3d"></canvas>
+<header><div class="logo">SR<span>.LAB</span></div><nav>
+<button class="nav-btn active" onclick="openPage('home')">HOME</button><button class="nav-btn" onclick="openPage('stats')">STATS</button><button class="nav-btn" onclick="openPage('code')">CODE</button><button class="nav-btn" onclick="openPage('academic')">ACADEMIC</button><button class="nav-btn" onclick="openPage('files')">FILES</button><button class="nav-btn" onclick="openPage('travel')">TRAVEL</button><button class="nav-btn" onclick="openPage('now')">NOW</button><button class="nav-btn" onclick="openPage('contact')">CONTACT</button>
+</nav></header>
+<button id="editFloatBtn" onclick="openAdminLogin()">✏️</button>
 
-  <!-- AUTHENTICATION SCREEN -->
-  <div id="auth-screen" class="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-black dark:to-zinc-900">
-    <div class="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-2xl border border-gray-200 dark:border-zinc-800 transition-all">
-      <div class="text-center mb-6">
-        <p class="text-[11px] font-bold text-blue-500 mb-2 tracking-wide uppercase">Developer: Nafis Ahmed Ratul</p>
-        <h1 class="text-5xl font-black text-blue-600 tracking-tight mb-2">বন্ধু</h1>
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">আপনার সামাজিক যোগাযোগ মাধ্যম</p>
-      </div>
+<div id="home" class="page active"><div class="hero">
+<div class="profile-wrap">
+<div class="profile-img-box"><img id="homeImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400" alt="profile"></div>
+<div class="profile-info"><h1 id="homeName">Ratul<br><span>Ahmed</span></h1><div class="role" id="homeRole">FULL STACK DEVELOPER • SIROJGANJ</div><p class="bio" id="homeBio">আমি Sirajganj থেকে - Academic Excellence, Programming আর Travel নিয়ে কাজ করি। Super Animated Premium Website বানাই যা দেখলেই মানুষ Wow বলবে। Gemini কে হারানোর মিশনে আছি!</p></div>
+</div>
+<div class="grid-btns">
+<div class="btn3d" onclick="openPage('stats')">📊 STATS</div><div class="btn3d" onclick="openPage('code')">💻 CODE</div><div class="btn3d" onclick="openPage('academic')">🎓 ACADEMIC</div><div class="btn3d" onclick="openPage('files')">📁 FILES</div><div class="btn3d" onclick="openPage('travel')">✈️ TRAVEL</div><div class="btn3d" onclick="openPage('now')">🔥 NOW</div><div class="btn3d" onclick="openPage('contact')">📩 CONTACT</div>
+</div>
+</div></div>
 
-      <div id="auth-error" class="hidden bg-red-50 border border-red-200 text-red-600 text-xs p-3 rounded-xl mb-4 text-center font-medium"></div>
+<div id="stats" class="page"><h2>Stats</h2><div class="stat-grid" id="statsGrid"></div><br><button class="nav-btn" onclick="openPage('home')">← HOME</button></div>
+<div id="code" class="page"><h2>Programming Hub</h2><div class="cards" id="codeGrid"></div><br><button class="nav-btn" onclick="openPage('home')">← HOME</button></div>
+<div id="academic" class="page"><h2>Academic</h2><div class="cards" id="academicGrid"></div><br><button class="nav-btn" onclick="openPage('home')">← HOME</button></div>
 
-      <form id="login-form" class="space-y-4">
-        <div>
-          <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">ইমেইল</label>
-          <input type="email" id="login-email" placeholder="example@mail.com" class="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 transition" required />
-        </div>
-        <div>
-          <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">পাসওয়ার্ড</label>
-          <input type="password" id="login-password" placeholder="••••••••" class="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 transition" required />
-        </div>
-        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-lg shadow-blue-500/30 transition">লগইন করুন</button>
-      </form>
+<!-- Files Page -->
+<div id="files" class="page"><h2>My File Storage / Documents</h2><p style="color:#a1a1aa;margin-bottom:15px">PDF, Docs, Images ebong onnano file gulo ekhane shongrohito ache.</p><div class="cards" id="filesGrid"></div><br><button class="nav-btn" onclick="openPage('home')">← HOME</button></div>
 
-      <form id="register-form" class="space-y-3 hidden">
-        <div>
-          <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">পুরো নাম</label>
-          <input type="text" id="reg-name" placeholder="আপনার নাম" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl text-sm outline-none" required />
-        </div>
-        <div>
-          <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">ইমেইল</label>
-          <input type="email" id="reg-email" placeholder="example@mail.com" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl text-sm outline-none" required />
-        </div>
-        <div>
-          <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">পাসওয়ার্ড</label>
-          <input type="password" id="reg-password" placeholder="••••••••" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl text-sm outline-none" required />
-        </div>
-        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm shadow-lg shadow-green-500/30 transition mt-2">নতুন অ্যাকাউন্ট খুলুন</button>
-      </form>
+<div id="travel" class="page"><h2 id="travelTitle"></h2><div class="cards" id="travelGrid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))"></div><br><button class="nav-btn" onclick="openPage('home')">← HOME</button></div>
+<div id="now" class="page"><h2>Now Focus</h2><div class="cards" id="nowGrid"></div><br><button class="nav-btn" onclick="openPage('home')">← HOME</button></div>
+<div id="contact" class="page"><h2>Contact Me</h2>
+<div class="social-grid" id="socialGrid"></div>
+<div style="max-width:500px;margin-top:30px"><input id="n" placeholder="Your Name"><input id="e" placeholder="Email"><textarea id="m" rows="4" placeholder="Message"></textarea><button class="btn-send" onclick="showToast('✅ Message Sent!')">Send Message 🚀</button></div>
+<br><button class="nav-btn" onclick="openPage('home')">← HOME</button></div>
 
-      <div class="mt-6 text-center border-t border-gray-200 dark:border-zinc-800 pt-4">
-        <p class="text-xs text-gray-500">
-          <span id="toggle-auth-text">অ্যাকাউন্ট নেই?</span>
-          <button type="button" id="toggle-auth-btn" class="text-blue-600 font-bold ml-1 hover:underline outline-none">নতুন অ্যাকাউন্ট তৈরি করুন</button>
-        </p>
-      </div>
-    </div>
-  </div>
+<div id="adminLogin"><div class="admin-box" style="max-width:400px"><h2>🔒 Admin Login</h2><p style="color:#a1a1aa;font-size:13px;margin:8px 0">পাসওয়ার্ড: ratul_cst</p><input id="adminPass" type="password" placeholder="ratul_cst"><button class="btn-send" onclick="checkAdmin()">Unlock 🔓</button><button class="nav-btn" style="width:100%;margin-top:10px" onclick="closeAdminLogin()">Cancel</button></div></div>
 
-  <!-- MAIN APPLICATION SCREEN -->
-  <div id="app-screen" class="hidden min-h-screen pb-20 sm:pb-6">
-    
-    <nav class="fixed top-0 left-0 w-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-gray-200 dark:border-zinc-800 z-40 px-4 py-2.5 flex items-center justify-between">
-      <span class="text-2xl font-black text-blue-600 cursor-pointer select-none" onclick="switchTab('home')">বন্ধু</span>
+<div id="adminPanel"><div class="admin-box">
+<h2>⚙️ Easy Admin - সব Edit করো (No Code)</h2>
 
-      <div class="hidden sm:flex items-center space-x-2">
-        <button onclick="switchTab('home')" class="nav-btn nav-btn-home px-4 py-2 rounded-xl text-blue-600 font-semibold relative">
-          <i data-lucide="home" class="w-5 h-5"></i>
-        </button>
-        <button onclick="switchTab('friends')" class="nav-btn nav-btn-friends px-4 py-2 rounded-xl text-gray-500 font-semibold relative">
-          <i data-lucide="users" class="w-5 h-5"></i>
-          <span id="friend-badge" class="hidden absolute top-1 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
-        </button>
-        <button onclick="switchTab('chat')" class="nav-btn nav-btn-chat px-4 py-2 rounded-xl text-gray-500 font-semibold relative">
-          <i data-lucide="message-square" class="w-5 h-5"></i>
-          <span id="chat-badge" class="hidden absolute top-1 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
-        </button>
-        <button onclick="switchTab('notifications')" class="nav-btn nav-btn-notifications px-4 py-2 rounded-xl text-gray-500 font-semibold relative">
-          <i data-lucide="bell" class="w-5 h-5"></i>
-          <span id="global-notif-badge" class="hidden absolute top-1 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-        </button>
-      </div>
+<div class="edit-group"><h4>👤 1. Home Profile - তোমার ছবি, নাম, Bio</h4>
+<label style="font-size:11px;color:#a1a1aa">ছবির লিংক (Img URL) বা ডিভাইস থেকে আপলোড:</label>
+<div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">
+  <label class="upload-btn-label">📁 Upload Profile Pic<input type="file" id="profilePicFile" accept="image/*" style="display:none" onchange="uploadProfileImage(this)"></label>
+  <span id="profilePicProgress" class="upload-progress">Uploading... 0%</span>
+</div>
+<input id="eProfileImg" placeholder="https://...jpg">
+<label style="font-size:11px;color:#a1a1aa">নাম:</label><input id="eProfileName" placeholder="Ratul Ahmed">
+<label style="font-size:11px;color:#a1a1aa">Role / পরিচয়:</label><input id="eProfileRole" placeholder="FULL STACK DEVELOPER">
+<label style="font-size:11px;color:#a1a1aa">Bio:</label><textarea id="eProfileBio" rows="3"></textarea>
+</div>
 
-      <div class="flex items-center space-x-3">
-        <button onclick="switchTab('profile')" class="flex items-center space-x-2 p-1 rounded-full">
-          <img id="nav-user-img" src="" class="w-8 h-8 rounded-full object-cover border border-blue-500" />
-          <span id="nav-user-name" class="hidden lg:inline text-xs font-bold pr-2"></span>
-        </button>
-        <button id="logout-btn" title="Logout" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-zinc-800 rounded-full"><i data-lucide="log-out" class="w-5 h-5"></i></button>
-      </div>
-    </nav>
+<div class="edit-group"><h4>📊 2. Stats</h4><div id="easyStats"></div></div>
 
-    <main class="max-w-2xl sm:max-w-4xl mx-auto pt-20 px-3">
-      
-      <!-- TAB 1: HOME FEED -->
-      <section id="tab-home" class="tab-content space-y-4">
-        
-        <div class="bg-white dark:bg-zinc-900 rounded-2xl p-3 shadow-sm border border-gray-200 dark:border-zinc-800 flex items-center space-x-2">
-          <i data-lucide="search" class="w-4 h-4 text-gray-400 ml-2"></i>
-          <input type="text" id="feed-search-input" placeholder="পোস্ট বা নাম দিয়ে সার্চ করুন..." class="w-full bg-transparent text-xs outline-none dark:text-white" oninput="filterPosts(this.value)" />
-          <button onclick="clearSearch()" class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-white px-2">রিসেট</button>
-        </div>
+<div class="edit-group"><h4>💻 3. Projects</h4><div id="easyCode"></div><button class="small-btn" onclick="addCode()">+ নতুন প্রজেক্ট</button></div>
 
-        <div class="bg-white dark:bg-zinc-900 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-zinc-800 space-y-3">
-          <div class="flex space-x-3 items-center">
-            <img id="create-post-user-img" src="" class="w-10 h-10 rounded-full object-cover border" />
-            <input type="text" id="post-caption" placeholder="আপনার মনে কি আছে?" class="w-full bg-gray-100 dark:bg-zinc-800 rounded-full px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" />
-          </div>
-          
-          <div class="flex items-center space-x-2 bg-gray-50 dark:bg-zinc-800/50 p-2 rounded-xl border dark:border-zinc-800">
-            <label class="cursor-pointer bg-blue-50 dark:bg-zinc-700 hover:bg-blue-100 text-blue-600 dark:text-blue-300 text-[11px] font-bold px-3 py-1.5 rounded-lg transition flex items-center space-x-1">
-              <i data-lucide="image" class="w-3.5 h-3.5"></i>
-              <span>ছবি যুক্ত করুন</span>
-              <input type="file" id="post-image-file" accept="image/*" class="hidden" />
-            </label>
-            <span id="post-file-name" class="text-[10px] text-gray-400 truncate">কোনো ছবি সিলেক্ট করা হয়নি</span>
-          </div>
+<div class="edit-group"><h4>🎓 4. Academic</h4><div id="easyAcademic"></div><button class="small-btn" onclick="addAcademic()">+ নতুন</button></div>
 
-          <div class="flex justify-end pt-2 border-t dark:border-zinc-800">
-            <button id="submit-post-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-2 rounded-xl shadow">পোস্ট করুন</button>
-          </div>
-        </div>
+<div class="edit-group"><h4>📁 5. File Storage (PDF, Docs, Pics, etc.)</h4><div id="easyFiles"></div><button class="small-btn" onclick="addFile()">+ নতুন ফাইল যোগ করো</button></div>
 
-        <div id="posts-container" class="space-y-4">
-          <div class="text-center py-10 text-xs text-gray-400">পোস্ট লোড হচ্ছে...</div>
-        </div>
-      </section>
+<div class="edit-group"><h4>✈️ 6. Travel Gallery</h4>
+<input id="easyTravelTitle" placeholder="Travel Title">
+<div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">
+  <label class="upload-btn-label">📸 Add Travel Photo from Storage<input type="file" id="travelPicFile" accept="image/*" style="display:none" onchange="uploadTravelImage(this)"></label>
+  <span id="travelPicProgress" class="upload-progress">Uploading... 0%</span>
+</div>
+<textarea id="easyTravel" rows="4" placeholder="ছবির লিংক, এক লাইনে একটা"></textarea>
+</div>
 
-      <!-- TAB 2: FRIENDS -->
-      <section id="tab-friends" class="tab-content hidden space-y-4">
-        <div class="bg-white dark:bg-zinc-900 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-zinc-800">
-          <h2 class="text-sm font-bold mb-4">ফ্রেন্ড রিকোয়েস্ট</h2>
-          <div id="friend-requests-list" class="space-y-3">
-            <div class="text-xs text-gray-400">কোনো নতুন ফ্রেন্ড রিকোয়েস্ট নেই।</div>
-          </div>
-        </div>
+<div class="edit-group"><h4>🔥 7. Now Focus</h4><div id="easyNow"></div><button class="small-btn" onclick="addNow()">+ নতুন</button></div>
 
-        <div class="bg-white dark:bg-zinc-900 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-zinc-800">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-sm font-bold">নতুন ব্যবহারকারী (People You May Know)</h2>
-          </div>
-          
-          <div class="bg-gray-50 dark:bg-zinc-800/60 rounded-xl p-2.5 mb-4 flex items-center space-x-2 border border-gray-200 dark:border-zinc-700">
-            <i data-lucide="search" class="w-4 h-4 text-gray-400 ml-1"></i>
-            <input type="text" id="user-search-input" placeholder="ব্যবহারকারীর নাম দিয়ে খুঁজুন..." class="w-full bg-transparent text-xs outline-none dark:text-white" oninput="filterSuggestions(this.value)" />
-            <button onclick="clearUserSearch()" class="text-[11px] text-gray-400 hover:text-gray-600 dark:hover:text-white px-1">রিসেট</button>
-          </div>
+<div class="edit-group"><h4>📩 8. Contact Social Links - তোমার সব লিংক</h4>
+<label style="font-size:11px">WhatsApp Link:</label><input id="eWhatsapp" placeholder="https://wa.me/8801...">
+<label style="font-size:11px">GitHub:</label><input id="eGithub" placeholder="https://github.com/...">
+<label style="font-size:11px">Facebook:</label><input id="eFacebook" placeholder="https://facebook.com/...">
+<label style="font-size:11px">Instagram:</label><input id="eInstagram" placeholder="https://instagram.com/...">
+<label style="font-size:11px">Twitter / X:</label><input id="eTwitter" placeholder="https://x.com/...">
+</div>
 
-          <div id="friend-suggestions-list" class="space-y-4">
-            <div class="text-xs text-gray-400">লোড হচ্ছে...</div>
-          </div>
-        </div>
-      </section>
+<button class="btn-send" onclick="saveEasy()" style="background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff">💾 Save All - সাইট আপডেট হবে</button>
+<button class="nav-btn" style="width:100%;margin-top:10px" onclick="closeAdmin()">❌ বন্ধ করো</button>
+</div></div>
 
-      <!-- TAB 3: CHAT ROOM (WhatsApp Style Flex & Scroll Fixed Layout) -->
-      <section id="tab-chat" class="tab-content hidden">
-        <div class="bg-[#efeae2] dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 h-[78vh] sm:h-[80vh] flex flex-col overflow-hidden relative">
-          
-          <!-- Chat Header -->
-          <div class="p-3 border-b border-gray-300/50 dark:border-zinc-800 flex items-center justify-between bg-[#f0f2f5] dark:bg-zinc-900 z-30 flex-shrink-0">
-            <div class="flex items-center space-x-2 sm:space-x-3">
-              <!-- Mobile Back Button to Chat List -->
-              <button onclick="backToChatList()" id="chat-back-btn" class="sm:hidden text-gray-600 dark:text-gray-300 p-1 rounded-lg bg-gray-200 dark:bg-zinc-800 text-xs font-bold px-2">← তালিকা</button>
-              <img id="chat-target-img" src="https://via.placeholder.com/150" class="w-9 h-9 rounded-full object-cover cursor-pointer border border-gray-300 dark:border-zinc-700" />
-              <div>
-                <div id="chat-target-name" class="text-xs font-bold cursor-pointer dark:text-white">চ্যাট সিলেক্ট করুন</div>
-                <div id="chat-target-status" class="text-[10px] text-gray-500 dark:text-gray-400">মেসেজ করতে নিচে তালিকা থেকে ফ্রেন্ড বা গ্রুপ নির্বাচন করুন</div>
-              </div>
-            </div>
-            <!-- Group Settings Extra Buttons Area -->
-            <div id="group-header-actions" class="hidden flex items-center space-x-2">
-              <button onclick="openGroupSettingsModal()" class="bg-gray-200 dark:bg-zinc-800 text-xs px-2.5 py-1.5 rounded-xl font-bold">⚙️ সেটিংস</button>
-              <button onclick="leaveCurrentGroup()" class="bg-red-500 text-white text-xs px-2.5 py-1.5 rounded-xl font-bold">leave</button>
-            </div>
-          </div>
+<div id="toast"></div>
 
-          <!-- Chat Body Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 flex-1 overflow-hidden relative min-h-0">
-            
-            <!-- Sidebar: Friends/Groups List -->
-            <div id="chat-users-list" class="col-span-1 border-r border-gray-300/50 dark:border-zinc-800 overflow-y-auto p-2 space-y-1 bg-white/90 dark:bg-zinc-900/90 h-full absolute sm:relative inset-0 z-20 transition-all">
-              <div class="text-[11px] text-gray-400 text-center py-4">ফ্রেন্ড লিস্ট খালি...</div>
-            </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
+  import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+  import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
 
-            <!-- Chat Conversation Area (WhatsApp Theme & Scroll Layout) -->
-            <div id="chat-conversation-pane" class="hidden sm:flex col-span-1 sm:col-span-2 flex-col h-full bg-[radial-gradient(#e5ddd5_1px,transparent_1px)] dark:bg-[radial-gradient(#182229_1px,transparent_1px)] [background-size:16px_16px] bg-[#efeae2] dark:bg-[#0b141a] absolute sm:relative inset-0 z-20 overflow-hidden">
-              
-              <!-- Messages Scrollable Container -->
-              <div id="chat-messages-box" class="p-4 space-y-3 overflow-y-auto flex-1 scroll-smooth w-full min-h-0">
-                <div class="text-xs text-center text-gray-500 dark:text-gray-400 mt-10 bg-white/60 dark:bg-zinc-800/60 py-3 px-4 rounded-xl shadow-sm mx-auto max-w-xs">মেসেজ আদান-প্রদান করতে কোনো ফ্রেন্ড বা গ্রুপ নির্বাচন করুন।</div>
-              </div>
+  // Updated Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAUDB0TX_nBz_LtzxHZu93Hgl6Q11pwc6U",
+    authDomain: "bondu-418b2.firebaseapp.com",
+    databaseURL: "https://bondu-418b2-default-rtdb.firebaseio.com",
+    projectId: "bondu-418b2",
+    storageBucket: "bondu-418b2.firebasestorage.app",
+    messagingSenderId: "771346025654",
+    appId: "1:771346025654:web:a4b97466cb667881582a17",
+    measurementId: "G-CB91WPGM4F"
+  };
 
-              <!-- Reply Preview Section -->
-              <div id="reply-preview-container" class="hidden px-3 py-1.5 bg-[#f0f2f5] dark:bg-zinc-800 border-t border-gray-300 dark:border-zinc-700 flex justify-between items-center text-xs flex-shrink-0 z-30">
-                <div class="truncate text-gray-600 dark:text-gray-300" id="reply-preview-text">রিপ্লাই...</div>
-                <button onclick="cancelReply()" class="text-red-500 font-bold ml-2">✕</button>
-              </div>
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
 
-              <!-- WhatsApp Style Fixed Input Footer Area -->
-              <div class="p-2.5 border-t border-gray-300/60 dark:border-zinc-800 bg-[#f0f2f5] dark:bg-zinc-900 space-y-2 flex-shrink-0 z-30 shadow-lg">
-                <div class="flex items-center space-x-2">
-                  <label class="cursor-pointer bg-white dark:bg-zinc-800 hover:bg-gray-100 text-gray-700 dark:text-gray-300 text-[10px] px-2.5 py-1 rounded-lg border border-gray-300 dark:border-zinc-700 flex items-center space-x-1 shadow-sm">
-                    <i data-lucide="image" class="w-3 h-3 text-emerald-600"></i>
-                    <span id="chat-file-label">ছবি যুক্ত করুন</span>
-                    <input type="file" id="chat-image-file" accept="image/*" class="hidden" />
-                  </label>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <input type="text" id="chat-input-field" placeholder="টাইপ এ মেসেজ..." class="flex-1 bg-white dark:bg-zinc-800 px-4 py-2.5 rounded-full text-xs outline-none border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-emerald-500 dark:text-white shadow-inner" />
-                  <button id="send-msg-btn" class="bg-[#00a884] hover:bg-[#01755c] text-white p-2.5 rounded-full shadow transition flex items-center justify-center"><i data-lucide="send" class="w-4 h-4"></i></button>
-                </div>
-              </div>
+  // Global Scope Exports
+  window.firebaseApp = app;
+  window.firebaseDb = db;
+  window.firebaseStorage = storage;
 
-            </div>
-          </div>
+  // Generic Storage File Upload helper with LocalStorage Fallback
+  window.uploadFileToStorage = function(file, folderPath, onProgress, onSuccess, onError) {
+    if(!file) return;
 
-        </div>
-      </section>
-
-      <!-- TAB 4: NOTIFICATIONS -->
-      <section id="tab-notifications" class="tab-content hidden space-y-4">
-        <div class="bg-white dark:bg-zinc-900 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-zinc-800">
-          <h2 class="text-sm font-bold mb-4 flex items-center space-x-2">
-            <i data-lucide="bell" class="w-4 h-4 text-blue-500"></i>
-            <span>সকল নোটিফিকেশন</span>
-          </h2>
-          <div id="notifications-list" class="space-y-3">
-            <div class="text-xs text-gray-400 text-center py-6">কোনো নতুন নোটিফিকেশন নেই।</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 5: PROFILE -->
-      <section id="tab-profile" class="tab-content hidden space-y-4">
-        <div class="bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-sm border border-gray-200 dark:border-zinc-800 p-5">
-          <div class="flex justify-between items-start mb-3">
-            <img id="profile-user-pic" src="" class="w-24 h-24 rounded-full border-2 border-blue-500 object-cover" />
-            <button id="toggle-edit-profile-btn" class="bg-blue-50 dark:bg-zinc-800 hover:bg-blue-100 text-blue-600 dark:text-blue-400 text-xs font-bold px-3 py-2 rounded-xl flex items-center space-x-1.5 border border-blue-200 dark:border-zinc-700 transition">
-              <i data-lucide="user-cog" class="w-4 h-4"></i>
-              <span>এডিট প্রোফাইল</span>
-            </button>
-          </div>
-          <h1 id="profile-name-text" class="text-xl font-black">...</h1>
-          <p id="profile-email-text" class="text-xs text-gray-500 mt-0.5">...</p>
-          
-          <p id="profile-bio-text" class="text-xs italic text-gray-600 dark:text-gray-300 mt-2 bg-gray-50 dark:bg-zinc-800/50 p-2.5 rounded-xl border dark:border-zinc-800">বায়ো যুক্ত করা হয়নি...</p>
-
-          <p id="profile-friends-count" onclick="openMyFriendsModal()" class="text-xs font-bold text-blue-600 mt-3 cursor-pointer hover:underline inline-block">মোট ফ্রেন্ড: 0</p>
-
-          <div id="edit-profile-box" class="hidden mt-5 pt-4 border-t dark:border-zinc-800 space-y-3">
-            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">প্রোফাইল আপডেট করুন</h3>
-            <div>
-              <label class="text-[11px] font-semibold text-gray-600 dark:text-gray-400 block mb-1">আপনার নাম</label>
-              <input type="text" id="edit-name-input" class="w-full bg-gray-50 dark:bg-zinc-800 border dark:border-zinc-700 rounded-xl px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" />
-            </div>
-            
-            <div>
-              <label class="text-[11px] font-semibold text-gray-600 dark:text-gray-400 block mb-1">আপনার বায়ো (Bio)</label>
-              <input type="text" id="edit-bio-input" placeholder="নিজের সম্পর্কে কিছু লিখুন..." class="w-full bg-gray-50 dark:bg-zinc-800 border dark:border-zinc-700 rounded-xl px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" />
-            </div>
-
-            <div>
-              <label class="text-[11px] font-semibold text-gray-600 dark:text-gray-400 block mb-1">প্রোফাইল ছবি আপলোড করুন</label>
-              <input type="file" id="edit-pic-file" accept="image/*" class="w-full bg-gray-50 dark:bg-zinc-800 border dark:border-zinc-700 rounded-xl px-3 py-2 text-xs outline-none dark:text-white" />
-            </div>
-            <div class="flex justify-end space-x-2 pt-2">
-              <button type="button" id="cancel-edit-btn" class="bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 text-xs px-4 py-2 rounded-xl font-bold">বাতিল</button>
-              <button type="button" id="save-profile-btn" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-2 rounded-xl font-bold shadow">সেভ করুন</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </main>
-
-    <!-- SHARE POPUP MODAL -->
-    <div id="share-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-white dark:bg-zinc-900 w-full max-w-sm rounded-3xl p-5 border border-gray-200 dark:border-zinc-800 shadow-2xl text-center space-y-4 relative">
-        <h3 class="text-sm font-bold">পোস্ট শেয়ার করুন</h3>
-        <p class="text-xs text-gray-500">নিচের লিংকে ক্লিক করে পোস্টটি কপি বা শেয়ার করতে পারেন:</p>
-        <input type="text" id="share-link-input" readonly class="w-full bg-gray-100 dark:bg-zinc-800 px-3 py-2 rounded-xl text-xs text-center outline-none select-all dark:text-white" />
-        <div class="flex space-x-2">
-          <button onclick="copyShareLink()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-2.5 rounded-xl font-bold">লিংক কপি করুন</button>
-          <button onclick="closeShareModal()" class="flex-1 bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 text-xs py-2.5 rounded-xl font-bold">বন্ধ করুন</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- OTHER USER PROFILE MODAL -->
-    <div id="user-profile-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-white dark:bg-zinc-900 w-full max-w-md rounded-3xl p-5 border border-gray-200 dark:border-zinc-800 shadow-2xl relative max-h-[85vh] overflow-y-auto">
-        <button onclick="closeUserProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-white p-1">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-        <div class="flex items-center justify-between mb-2">
-          <div class="flex items-center space-x-4">
-            <img id="modal-user-pic" src="" class="w-16 h-16 rounded-full object-cover border-2 border-blue-500" />
-            <div>
-              <h3 id="modal-user-name" class="text-lg font-black"></h3>
-              <p id="modal-user-email" class="text-xs text-gray-500"></p>
-            </div>
-          </div>
-          <div id="modal-action-btn-container"></div>
-        </div>
-        
-        <p id="modal-user-bio" class="text-xs italic text-gray-600 dark:text-gray-300 mb-2 bg-gray-50 dark:bg-zinc-800/50 p-2 rounded-xl">বায়ো নেই...</p>
-        <p id="modal-user-friends" class="text-xs font-bold text-blue-600 mb-3">মোট ফ্রেন্ড: 0</p>
-        
-        <div class="mb-4">
-          <input type="text" id="modal-profile-link-input" readonly class="hidden" />
-          <button onclick="copyUserProfileLink()" class="w-full bg-blue-50 dark:bg-zinc-800 hover:bg-blue-100 dark:hover:bg-zinc-700 text-blue-600 dark:text-blue-400 text-xs font-bold py-2.5 px-3 rounded-xl border border-blue-200 dark:border-zinc-700 transition flex items-center justify-center space-x-2">
-            <i data-lucide="link" class="w-4 h-4"></i>
-            <span>প্রোফাইলের লিংক কপি করুন</span>
-          </button>
-        </div>
-
-        <hr class="border-gray-200 dark:border-zinc-800 my-3" />
-        <h4 class="text-xs font-bold text-gray-500 mb-2">ব্যবহারকারীর পোস্টসমূহ</h4>
-        <div id="modal-user-posts" class="space-y-3">
-          <div class="text-xs text-gray-400 text-center py-4">পোস্ট লোড হচ্ছে...</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- MY FRIENDS LIST MODAL -->
-    <div id="my-friends-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-white dark:bg-zinc-900 w-full max-w-sm rounded-3xl p-5 border border-gray-200 dark:border-zinc-800 shadow-2xl relative max-h-[85vh] overflow-y-auto space-y-3">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="text-sm font-bold">আমার ফ্রেন্ড লিস্ট</h3>
-          <button onclick="closeMyFriendsModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-white p-1">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
-        </div>
-        <div id="my-friends-modal-list" class="space-y-2">
-          <div class="text-xs text-gray-400 text-center py-4">লোড হচ্ছে...</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CREATE GROUP MODAL -->
-    <div id="create-group-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-white dark:bg-zinc-900 w-full max-w-sm rounded-3xl p-5 border border-gray-200 dark:border-zinc-800 shadow-2xl space-y-4 relative">
-        <h3 class="text-sm font-bold">নতুন চ্যাট গ্রুপ তৈরি করুন</h3>
-        <div>
-          <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">গ্রুপের নাম</label>
-          <input type="text" id="group-name-input" placeholder="গ্রুপের নাম লিখুন..." class="w-full bg-gray-100 dark:bg-zinc-800 px-3 py-2 rounded-xl text-xs outline-none dark:text-white" />
-        </div>
-        <div class="flex space-x-2 pt-2">
-          <button onclick="createChatGroup()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-2.5 rounded-xl font-bold">তৈরি করুন</button>
-          <button onclick="closeGroupModal()" class="flex-1 bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 text-xs py-2.5 rounded-xl font-bold">বাতিল</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- GROUP SETTINGS MODAL (Admin Edit Name/Pic & Add Members) -->
-    <div id="group-settings-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-white dark:bg-zinc-900 w-full max-w-sm rounded-3xl p-5 border border-gray-200 dark:border-zinc-800 shadow-2xl space-y-4 relative max-h-[85vh] overflow-y-auto">
-        <h3 class="text-sm font-bold mb-2">গ্রুপ সেটিংস</h3>
-        
-        <div id="admin-only-settings" class="space-y-3">
-          <div>
-            <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">গ্রুপের নাম পরিবর্তন</label>
-            <input type="text" id="settings-group-name-input" class="w-full bg-gray-100 dark:bg-zinc-800 px-3 py-2 rounded-xl text-xs outline-none dark:text-white" />
-          </div>
-          <div>
-            <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">গ্রুপের ছবি পরিবর্তন</label>
-            <input type="file" id="settings-group-pic-file" accept="image/*" class="w-full bg-gray-100 dark:bg-zinc-800 px-3 py-2 rounded-xl text-xs outline-none dark:text-white" />
-          </div>
-          <button onclick="saveGroupInfoChanges()" class="w-full bg-blue-600 text-white text-xs py-2 rounded-xl font-bold">নাম ও ছবি সেভ করুন</button>
-          
-          <hr class="my-2 border-gray-200 dark:border-zinc-700" />
-          <h4 class="text-xs font-bold text-gray-600 dark:text-gray-400">ফ্রেন্ড যোগ করুন</h4>
-          <div id="group-add-friends-list" class="space-y-2 max-h-36 overflow-y-auto">
-            <!-- Dynamic Friends list to add -->
-          </div>
-        </div>
-
-        <div class="pt-2">
-          <button onclick="closeGroupSettingsModal()" class="w-full bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 text-xs py-2.5 rounded-xl font-bold">বন্ধ করুন</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- MOBILE NAVBAR -->
-    <nav class="fixed bottom-0 left-0 w-full bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-800 flex justify-around py-2.5 sm:hidden z-40">
-      <button onclick="switchTab('home')" class="nav-btn nav-btn-home text-blue-600 p-2 relative">
-        <i data-lucide="home" class="w-6 h-6"></i>
-      </button>
-      <button onclick="switchTab('friends')" class="nav-btn nav-btn-friends text-gray-500 p-2 relative">
-        <i data-lucide="users" class="w-6 h-6"></i>
-        <span id="friend-badge-m" class="hidden absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-      </button>
-      <button onclick="switchTab('chat')" class="nav-btn nav-btn-chat text-gray-500 p-2 relative">
-        <i data-lucide="message-square" class="w-6 h-6"></i>
-        <span id="chat-badge-m" class="hidden absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-      </button>
-      <button onclick="switchTab('notifications')" class="nav-btn nav-btn-notifications text-gray-500 p-2 relative">
-        <i data-lucide="bell" class="w-6 h-6"></i>
-        <span id="global-notif-badge-m" class="hidden absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-      </button>
-      <button onclick="switchTab('profile')" class="nav-btn nav-btn-profile text-gray-500 p-2"><i data-lucide="user" class="w-6 h-6"></i></button>
-    </nav>
-  </div>
-
-  <script>
-    // FIREBASE CONFIG
-    const firebaseConfig = {
-      apiKey: "AIzaSyAUDB0TX_nBz_LtzxHZu93Hgl6Q11pwc6U",
-      authDomain: "bondu-418b2.firebaseapp.com",
-      projectId: "bondu-418b2",
-      storageBucket: "bondu-418b2.firebasestorage.app",
-      messagingSenderId: "771346025654",
-      appId: "1:771346025654:web:a4b97466cb667881582a17",
-      measurementId: "G-CB91WPGM4F"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-
-    let currentUserData = null;
-    let selectedChatTargetId = null;
-    let isGroupChatTarget = false;
-    let currentSelectedGroupData = null;
-    let replyingToMessage = null;
-    let postImageBase64 = '';
-    let chatImageBase64 = '';
-    let profileImageBase64 = '';
-    let groupSettingsImageBase64 = '';
-    let allLoadedPosts = [];
-    let allLoadedSuggestions = [];
-    let myFriendsListCache = [];
-    let replyingToCommentId = null;
-
-    lucide.createIcons();
-
-    function convertFileToBase64(file, callback) {
+    // Helper: LocalStorage / FileReader Fallback
+    const fallbackToLocalStorage = () => {
       const reader = new FileReader();
-      reader.onload = () => callback(reader.result);
+      reader.onload = function(e) {
+        if(onProgress) onProgress(100);
+        if(onSuccess) onSuccess(e.target.result);
+      };
+      reader.onerror = function(err) {
+        if(onError) onError(err);
+      };
       reader.readAsDataURL(file);
-    }
-
-    document.getElementById('post-image-file').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        document.getElementById('post-file-name').innerText = file.name;
-        convertFileToBase64(file, (base64) => {
-          postImageBase64 = base64;
-        });
-      }
-    });
-
-    document.getElementById('chat-image-file').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        document.getElementById('chat-file-label').innerText = "ছবি সিলেক্টেড ✓";
-        convertFileToBase64(file, (base64) => {
-          chatImageBase64 = base64;
-        });
-      }
-    });
-
-    document.getElementById('edit-pic-file').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        convertFileToBase64(file, (base64) => {
-          profileImageBase64 = base64;
-        });
-      }
-    });
-
-    document.getElementById('settings-group-pic-file').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        convertFileToBase64(file, (base64) => {
-          groupSettingsImageBase64 = base64;
-        });
-      }
-    });
-
-    window.switchTab = function(tabName) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
-      const target = document.getElementById(`tab-${tabName}`);
-      if(target) target.classList.remove('hidden');
-
-      document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('text-blue-600');
-        btn.classList.add('text-gray-500');
-      });
-      document.querySelectorAll(`.nav-btn-${tabName}`).forEach(btn => {
-        btn.classList.remove('text-gray-500');
-        btn.classList.add('text-blue-600');
-      });
-
-      if(tabName === 'notifications') {
-        document.getElementById('global-notif-badge').classList.add('hidden');
-        document.getElementById('global-notif-badge-m').classList.add('hidden');
-      }
     };
 
-    let isRegisterMode = false;
-    document.getElementById('toggle-auth-btn').addEventListener('click', () => {
-      isRegisterMode = !isRegisterMode;
-      document.getElementById('login-form').classList.toggle('hidden', isRegisterMode);
-      document.getElementById('register-form').classList.toggle('hidden', !isRegisterMode);
-      document.getElementById('toggle-auth-text').innerText = isRegisterMode ? 'আগে থেকেই অ্যাকাউন্ট আছে?' : 'অ্যাকাউন্ট নেই?';
-      document.getElementById('toggle-auth-btn').innerText = isRegisterMode ? 'লগইন করুন' : 'নতুন অ্যাকাউন্ট তৈরি করুন';
-    });
+    try {
+      const fileName = Date.now() + '_' + file.name;
+      const storageRef = ref(storage, folderPath + '/' + fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
-    document.getElementById('login-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      auth.signInWithEmailAndPassword(
-        document.getElementById('login-email').value,
-        document.getElementById('login-password').value
-      ).catch(err => showError(err.message));
-    });
-
-    document.getElementById('register-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('reg-name').value;
-      const email = document.getElementById('reg-email').value;
-      const password = document.getElementById('reg-password').value;
-
-      auth.createUserWithEmailAndPassword(email, password).then(res => {
-        const defaultPic = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=0D8ABC&color=fff';
-        return db.collection('users').doc(res.user.uid).set({
-          uid: res.user.uid,
-          name: name,
-          email: email,
-          bio: 'বন্ধুতে-তে নতুন যুক্ত হয়েছি!',
-          profilePic: defaultPic
-        });
-      }).catch(err => showError(err.message));
-    });
-
-    document.getElementById('logout-btn').addEventListener('click', () => auth.signOut());
-
-    function showError(msg) {
-      const errBox = document.getElementById('auth-error');
-      errBox.innerText = msg;
-      errBox.classList.remove('hidden');
-    }
-
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        db.collection('users').doc(user.uid).onSnapshot(docSnap => {
-          currentUserData = docSnap.data();
-          document.getElementById('auth-screen').classList.add('hidden');
-          document.getElementById('app-screen').classList.remove('hidden');
-
-          if(currentUserData) {
-            document.getElementById('nav-user-name').innerText = currentUserData.name || user.email;
-            document.getElementById('nav-user-img').src = currentUserData.profilePic || 'https://via.placeholder.com/150';
-            document.getElementById('create-post-user-img').src = currentUserData.profilePic || 'https://via.placeholder.com/150';
-            document.getElementById('profile-name-text').innerText = currentUserData.name || 'User';
-            document.getElementById('profile-email-text').innerText = currentUserData.email || user.email;
-            document.getElementById('profile-bio-text').innerText = currentUserData.bio || 'বায়ো যুক্ত করা হয়নি...';
-            document.getElementById('profile-user-pic').src = currentUserData.profilePic || 'https://via.placeholder.com/150';
-
-            document.getElementById('edit-name-input').value = currentUserData.name || '';
-            document.getElementById('edit-bio-input').value = currentUserData.bio || '';
-            profileImageBase64 = currentUserData.profilePic || '';
-          }
-        });
-
-        db.collection('users').doc(user.uid).collection('friends').onSnapshot(snapshot => {
-          document.getElementById('profile-friends-count').innerText = `মোট ফ্রেন্ড: ${snapshot.size}`;
-          myFriendsListCache = [];
-          snapshot.forEach(fDoc => {
-            db.collection('users').doc(fDoc.id).get().then(uDoc => {
-              if(uDoc.exists) myFriendsListCache.push(uDoc.data());
-            });
-          });
-        });
-
-        loadRealPosts();
-        loadRealUsersAndRequests();
-        loadChatUsersList();
-      } else {
-        document.getElementById('auth-screen').classList.remove('hidden');
-        document.getElementById('app-screen').classList.add('hidden');
-      }
-    });
-
-    document.getElementById('toggle-edit-profile-btn').addEventListener('click', () => {
-      document.getElementById('edit-profile-box').classList.toggle('hidden');
-    });
-
-    document.getElementById('cancel-edit-btn').addEventListener('click', () => {
-      document.getElementById('edit-profile-box').classList.add('hidden');
-    });
-
-    document.getElementById('save-profile-btn').addEventListener('click', () => {
-      const newName = document.getElementById('edit-name-input').value.trim();
-      const newBio = document.getElementById('edit-bio-input').value.trim();
-
-      if (!newName) {
-        alert('নামের ঘর খালি রাখা যাবে না!');
-        return;
-      }
-
-      const user = auth.currentUser;
-      const defaultAvatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(newName) + '&background=0D8ABC&color=fff';
-
-      db.collection('users').doc(user.uid).set({
-        uid: user.uid,
-        name: newName,
-        email: user.email,
-        bio: newBio || 'বায়ো যুক্ত করা হয়নি...',
-        profilePic: profileImageBase64 || currentUserData?.profilePic || defaultAvatar
-      }, { merge: true }).then(() => {
-        alert('প্রোফাইল আপডেট হয়েছে!');
-        document.getElementById('edit-profile-box').classList.add('hidden');
-      }).catch(err => {
-        alert('সমস্যা হয়েছে: ' + err.message);
-      });
-    });
-
-    window.openMyFriendsModal = function() {
-      const modal = document.getElementById('my-friends-modal');
-      const listContainer = document.getElementById('my-friends-modal-list');
-      modal.classList.remove('hidden');
-      listContainer.innerHTML = '<div class="text-xs text-gray-400 text-center py-4">লোড হচ্ছে...</div>';
-
-      db.collection('users').doc(auth.currentUser.uid).collection('friends').get().then(snapshot => {
-        listContainer.innerHTML = '';
-        if(snapshot.empty) {
-          listContainer.innerHTML = '<div class="text-xs text-gray-400 text-center py-4">আপনার কোনো ফ্রেন্ড নেই।</div>';
-          return;
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+          const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          if(onProgress) onProgress(progress);
+        }, 
+        (error) => {
+          console.warn("Storage Upload Error, switching to Local Base64 Storage:", error);
+          fallbackToLocalStorage();
+        }, 
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            if(onSuccess) onSuccess(downloadURL);
+          }).catch(() => fallbackToLocalStorage());
         }
-
-        snapshot.forEach(fDoc => {
-          db.collection('users').doc(fDoc.id).get().then(uDoc => {
-            if(uDoc.exists) {
-              const u = uDoc.data();
-              listContainer.innerHTML += `
-                <div onclick="closeMyFriendsModal(); viewUserProfile('${u.uid}')" class="flex items-center space-x-3 p-2 bg-gray-50 dark:bg-zinc-800 rounded-xl cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-700">
-                  <img src="${u.profilePic || 'https://via.placeholder.com/150'}" class="w-9 h-9 rounded-full object-cover" />
-                  <div>
-                    <div class="text-xs font-bold">${u.name}</div>
-                    <div class="text-[10px] text-gray-400">${u.email}</div>
-                  </div>
-                </div>
-              `;
-            }
-          });
-        });
-      });
-    };
-
-    window.closeMyFriendsModal = function() {
-      document.getElementById('my-friends-modal').classList.add('hidden');
-    };
-
-    window.viewUserProfile = function(targetUid) {
-      if(targetUid === auth.currentUser.uid) {
-        switchTab('profile');
-        return;
-      }
-
-      const modal = document.getElementById('user-profile-modal');
-      modal.classList.remove('hidden');
-
-      const profileUrl = window.location.origin + window.location.pathname + '#profile-' + targetUid;
-      document.getElementById('modal-profile-link-input').value = profileUrl;
-
-      db.collection('users').doc(targetUid).get().then(docSnap => {
-        if (docSnap.exists) {
-          const u = docSnap.data();
-          document.getElementById('modal-user-name').innerText = u.name || 'User';
-          document.getElementById('modal-user-email').innerText = u.email || '';
-          document.getElementById('modal-user-bio').innerText = u.bio || 'বায়ো নেই...';
-          document.getElementById('modal-user-pic').src = u.profilePic || '';
-
-          const actionContainer = document.getElementById('modal-action-btn-container');
-          actionContainer.innerHTML = '';
-
-          db.collection('users').doc(auth.currentUser.uid).collection('friends').doc(targetUid).get().then(friendDoc => {
-            if(friendDoc.exists) {
-              actionContainer.innerHTML = `<span class="text-xs font-bold text-green-600 bg-green-50 dark:bg-zinc-800 px-3 py-1.5 rounded-xl">Friends ✓</span>`;
-            } else {
-              db.collection('users').doc(targetUid).collection('friendRequests').doc(auth.currentUser.uid).get().then(reqDoc => {
-                if(reqDoc.exists) {
-                  // Cancel option for sent friend requests
-                  actionContainer.innerHTML = `<button onclick="cancelSentFriendRequest('${targetUid}')" class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-xl font-bold">Cancel Request</button>`;
-                } else {
-                  db.collection('users').doc(auth.currentUser.uid).collection('friendRequests').doc(targetUid).get().then(incomingDoc => {
-                    if(incomingDoc.exists) {
-                      actionContainer.innerHTML = `<button onclick="acceptRequest('${targetUid}'); closeUserProfileModal();" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-xl font-bold">Accept Request</button>`;
-                    } else {
-                      actionContainer.innerHTML = `<button onclick="sendFriendRequestFromModal('${targetUid}', '${u.name}')" id="modal-add-friend-btn" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-xl font-bold">+ Add Friend</button>`;
-                    }
-                  });
-                }
-              });
-            }
-          });
-        }
-      });
-
-      db.collection('users').doc(targetUid).collection('friends').get().then(snap => {
-        document.getElementById('modal-user-friends').innerText = `মোট ফ্রেন্ড: ${snap.size}`;
-      });
-
-      db.collection('posts').where('userId', '==', targetUid).get().then(snap => {
-        const container = document.getElementById('modal-user-posts');
-        container.innerHTML = '';
-        if (snap.empty) {
-          container.innerHTML = `<div class="text-xs text-gray-400 text-center py-4">কোনো পোস্ট পাওয়া যায়নি।</div>`;
-          return;
-        }
-        snap.forEach(docSnap => {
-          const post = docSnap.data();
-          container.innerHTML += `
-            <div class="bg-gray-50 dark:bg-zinc-800/50 p-3 rounded-xl border dark:border-zinc-800">
-              <p class="text-xs leading-relaxed mb-2">${post.text}</p>
-              ${post.postImg ? `<img src="${post.postImg}" class="w-full rounded-lg max-h-48 object-cover mb-1" />` : ''}
-            </div>
-          `;
-        });
-      });
-    };
-
-    window.sendFriendRequestFromModal = function(targetUid, targetName) {
-      db.collection('users').doc(targetUid).collection('friendRequests').doc(auth.currentUser.uid).set({
-        senderId: auth.currentUser.uid,
-        senderName: currentUserData.name,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        const container = document.getElementById('modal-action-btn-container');
-        container.innerHTML = `<button onclick="cancelSentFriendRequest('${targetUid}')" class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-xl font-bold">Cancel Request</button>`;
-        loadRealUsersAndRequests();
-      });
-    };
-
-    window.cancelSentFriendRequest = function(targetUid) {
-      db.collection('users').doc(targetUid).collection('friendRequests').doc(auth.currentUser.uid).delete().then(() => {
-        const container = document.getElementById('modal-action-btn-container');
-        container.innerHTML = `<button onclick="sendFriendRequestFromModal('${targetUid}', '')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-xl font-bold">+ Add Friend</button>`;
-        loadRealUsersAndRequests();
-      });
-    };
-
-    window.closeUserProfileModal = function() {
-      document.getElementById('user-profile-modal').classList.add('hidden');
-    };
-
-    window.copyUserProfileLink = function() {
-      const linkInput = document.getElementById('modal-profile-link-input');
-      linkInput.select();
-      navigator.clipboard.writeText(linkInput.value);
-      alert('ইউজারের প্রোফাইল লিংক সফলভাবে কপি করা হয়েছে!');
-    };
-
-    document.getElementById('submit-post-btn').addEventListener('click', () => {
-      const caption = document.getElementById('post-caption').value;
-
-      if (!caption.trim() && !postImageBase64) {
-        alert('কিছু লিখুন অথবা ছবি দিন!');
-        return;
-      }
-
-      db.collection('posts').add({
-        userId: auth.currentUser.uid,
-        userName: currentUserData?.name || 'User',
-        userPic: currentUserData?.profilePic || '',
-        text: caption,
-        postImg: postImageBase64 || '',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        document.getElementById('post-caption').value = '';
-        document.getElementById('post-image-file').value = '';
-        document.getElementById('post-file-name').innerText = 'কোনো ছবি সিলেক্ট করা হয়নি';
-        postImageBase64 = '';
-      });
-    });
-
-    function loadRealPosts() {
-      db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
-        let isFirstLoad = allLoadedPosts.length === 0;
-        allLoadedPosts = [];
-        let hasNewPost = false;
-
-        snapshot.forEach(docSnap => {
-          const postData = { id: docSnap.id, ...docSnap.data() };
-          allLoadedPosts.push(postData);
-          if(!isFirstLoad && postData.userId !== auth.currentUser?.uid) {
-            hasNewPost = true;
-          }
-        });
-
-        if(hasNewPost) {
-          triggerNotificationUI("আপনার কোনো বন্ধু নতুন পোস্ট করেছেন!");
-        }
-
-        renderPosts(allLoadedPosts);
-      });
-    }
-
-    function triggerNotificationUI(messageText) {
-      document.getElementById('global-notif-badge').classList.remove('hidden');
-      document.getElementById('global-notif-badge-m').classList.remove('hidden');
-
-      const notifList = document.getElementById('notifications-list');
-      if(notifList.innerHTML.includes('কোনো নতুন নোটিফিকেশন নেই')) {
-        notifList.innerHTML = '';
-      }
-
-      notifList.innerHTML += `
-        <div class="p-3 bg-blue-50 dark:bg-zinc-800/80 rounded-xl border border-blue-100 dark:border-zinc-700 flex items-center justify-between">
-          <div class="text-xs font-semibold">${messageText}</div>
-          <span class="text-[10px] text-gray-400">এইমাত্র</span>
-        </div>
-      `;
-    }
-
-    function renderPosts(postsToRender) {
-      const container = document.getElementById('posts-container');
-      container.innerHTML = '';
-
-      if(postsToRender.length === 0) {
-        container.innerHTML = `<div class="text-center text-xs text-gray-500 py-6">কোনো পোস্ট খুঁজে পাওয়া যায়নি!</div>`;
-        return;
-      }
-
-      postsToRender.forEach(post => {
-        const postId = post.id;
-
-        container.innerHTML += `
-          <div class="bg-white dark:bg-zinc-900 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-zinc-800 space-y-3">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="viewUserProfile('${post.userId}')">
-              <img src="${post.userPic}" class="w-9 h-9 rounded-full object-cover border" />
-              <div class="text-xs font-bold hover:underline">${post.userName}</div>
-            </div>
-            <p class="text-xs leading-relaxed">${formatTaggedText(post.text)}</p>
-            ${post.postImg ? `<img src="${post.postImg}" class="w-full rounded-xl max-h-80 object-cover" />` : ''}
-            
-            <div class="flex items-center justify-between pt-2 border-t dark:border-zinc-800 text-xs text-gray-500">
-              <button onclick="toggleLike('${postId}')" id="like-btn-${postId}" class="flex items-center space-x-1 hover:text-blue-600 font-semibold">
-                <span>👍 লাইক</span> (<span id="like-count-${postId}">0</span>)
-              </button>
-              <button onclick="toggleCommentBox('${postId}')" class="flex items-center space-x-1 hover:text-blue-600 font-semibold">
-                <span>💬 কমেন্ট</span>
-              </button>
-              <button onclick="openShareModal('${postId}')" class="flex items-center space-x-1 hover:text-blue-600 font-semibold">
-                <span>↗ শেয়ার</span>
-              </button>
-            </div>
-
-            <div id="comments-section-${postId}" class="hidden space-y-2 pt-2 border-t dark:border-zinc-800">
-              <div id="comments-list-${postId}" class="space-y-1.5 max-h-40 overflow-y-auto text-xs">
-                <div class="text-gray-400">কমেন্ট লোড হচ্ছে...</div>
-              </div>
-              <div id="comment-replying-indicator-${postId}" class="hidden text-[10px] text-blue-500 font-bold flex justify-between items-center">
-                <span id="comment-replying-text">রিপ্লাই দেওয়া হচ্ছে...</span>
-                <button onclick="cancelCommentReply('${postId}')" class="text-red-500">✕ বাতিল</button>
-              </div>
-              
-              <div class="relative">
-                <div id="mention-dropdown-${postId}" class="hidden absolute bottom-full left-0 w-full bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl shadow-lg max-h-32 overflow-y-auto z-20 p-1 space-y-1"></div>
-                <div class="flex space-x-2 mt-2">
-                  <input type="text" id="comment-input-${postId}" oninput="handleCommentInput(event, '${postId}')" placeholder="কমেন্ট লিখুন (@ দিয়ে ফ্রেন্ড মেনশন করুন)..." class="flex-1 bg-gray-100 dark:bg-zinc-800 px-3 py-1.5 rounded-xl text-xs outline-none dark:text-white" />
-                  <button onclick="addComment('${postId}', '${post.userId}')" class="bg-blue-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold">সেন্ড</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-
-        db.collection('posts').doc(postId).collection('likes').onSnapshot(likesSnap => {
-          const countEl = document.getElementById(`like-count-${postId}`);
-          if(countEl) countEl.innerText = likesSnap.size;
-          
-          const btnEl = document.getElementById(`like-btn-${postId}`);
-          if(btnEl && likesSnap.docs.some(d => d.id === auth.currentUser.uid)) {
-            btnEl.classList.add('text-blue-600');
-            if(likesSnap.metadata.hasPendingWrites === false) {
-              likesSnap.docChanges().forEach(change => {
-                if(change.type === 'added' && change.doc.id !== auth.currentUser.uid) {
-                  db.collection('users').doc(change.doc.id).get().then(uDoc => {
-                    if(uDoc.exists) {
-                      triggerNotificationUI(`${uDoc.data().name} আপনার পোস্টে লাইক দিয়েছেন!`);
-                    }
-                  });
-                }
-              });
-            }
-          } else if(btnEl) {
-            btnEl.classList.remove('text-blue-600');
-          }
-        });
-
-        loadComments(postId, post.userId);
-      });
-    }
-
-    window.handleCommentInput = function(event, postId) {
-      const input = event.target;
-      const val = input.value;
-      const dropdown = document.getElementById(`mention-dropdown-${postId}`);
-      
-      const lastAtIndex = val.lastIndexOf('@');
-      if (lastAtIndex !== -1 && (lastAtIndex === 0 || val[lastAtIndex - 1] === ' ')) {
-        const query = val.substring(lastAtIndex + 1).toLowerCase();
-        const matchedFriends = myFriendsListCache.filter(f => f.name.toLowerCase().includes(query));
-
-        if (matchedFriends.length > 0) {
-          dropdown.innerHTML = '';
-          dropdown.classList.remove('hidden');
-          matchedFriends.forEach(friend => {
-            dropdown.innerHTML += `
-              <div onclick="selectMention('${postId}', '${friend.name}')" class="flex items-center space-x-2 p-1.5 hover:bg-blue-50 dark:hover:bg-zinc-700 rounded-lg cursor-pointer">
-                <img src="${friend.profilePic}" class="w-6 h-6 rounded-full object-cover" />
-                <span class="text-xs font-semibold">${friend.name}</span>
-              </div>
-            `;
-          });
-          return;
-        }
-      }
-      dropdown.classList.add('hidden');
-    };
-
-    window.selectMention = function(postId, friendName) {
-      const input = document.getElementById(`comment-input-${postId}`);
-      const val = input.value;
-      const lastAtIndex = val.lastIndexOf('@');
-      input.value = val.substring(0, lastAtIndex) + '@' + friendName + ' ';
-      document.getElementById(`mention-dropdown-${postId}`).classList.add('hidden');
-      input.focus();
-    };
-
-    function formatTaggedText(text) {
-      if(!text) return '';
-      return text.replace(/@([a-zA-Zবাংলাঅ-ঔক-হ\s]+)/g, '<span class="text-blue-500 font-bold">@$1</span>');
-    }
-
-    window.filterPosts = function(query) {
-      const q = query.toLowerCase().trim();
-      if(!q) {
-        renderPosts(allLoadedPosts);
-        return;
-      }
-      const filtered = allLoadedPosts.filter(p => 
-        (p.text && p.text.toLowerCase().includes(q)) || 
-        (p.userName && p.userName.toLowerCase().includes(q))
       );
-      renderPosts(filtered);
-    };
-
-    window.clearSearch = function() {
-      document.getElementById('feed-search-input').value = '';
-      renderPosts(allLoadedPosts);
-    };
-
-    window.toggleLike = function(postId) {
-      const likeRef = db.collection('posts').doc(postId).collection('likes').doc(auth.currentUser.uid);
-      likeRef.get().then(doc => {
-        if(doc.exists) {
-          likeRef.delete();
-        } else {
-          likeRef.set({ timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-        }
-      });
-    };
-
-    window.toggleCommentBox = function(postId) {
-      const box = document.getElementById(`comments-section-${postId}`);
-      if(box) box.classList.toggle('hidden');
-    };
-
-    window.setCommentReply = function(postId, commentId, userName) {
-      replyingToCommentId = commentId;
-      const indicator = document.getElementById(`comment-replying-indicator-${postId}`);
-      const textSpan = document.getElementById(`comment-replying-text`);
-      if(indicator && textSpan) {
-        indicator.classList.remove('hidden');
-        textSpan.innerText = `${userName}-কে রিপ্লাই দেওয়া হচ্ছে...`;
-      }
-    };
-
-    window.cancelCommentReply = function(postId) {
-      replyingToCommentId = null;
-      const indicator = document.getElementById(`comment-replying-indicator-${postId}`);
-      if(indicator) indicator.classList.add('hidden');
-    };
-
-    window.toggleCommentReact = function(postId, commentId) {
-      const reactRef = db.collection('posts').doc(postId).collection('comments').doc(commentId).collection('reactions').doc(auth.currentUser.uid);
-      reactRef.get().then(doc => {
-        if(doc.exists) {
-          reactRef.delete();
-        } else {
-          reactRef.set({ timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-        }
-      });
-    };
-
-    window.addComment = function(postId, postOwnerId) {
-      const input = document.getElementById(`comment-input-${postId}`);
-      const text = input.value.trim();
-      if(!text) return;
-
-      db.collection('posts').doc(postId).collection('comments').add({
-        userId: auth.currentUser.uid,
-        userName: currentUserData?.name || 'User',
-        userPic: currentUserData?.profilePic || '',
-        text: text,
-        replyToId: replyingToCommentId || null,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        input.value = '';
-        cancelCommentReply(postId);
-        const dropdown = document.getElementById(`mention-dropdown-${postId}`);
-        if(dropdown) dropdown.classList.add('hidden');
-
-        if(auth.currentUser.uid !== postOwnerId) {
-          triggerNotificationUI(`${currentUserData.name} আপনার পোস্টে কমেন্ট করেছেন!`);
-        }
-      });
-    };
-
-    function loadComments(postId, postOwnerId) {
-      db.collection('posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
-        const list = document.getElementById(`comments-list-${postId}`);
-        if(!list) return;
-        list.innerHTML = '';
-        if(snap.empty) {
-          list.innerHTML = `<div class="text-[10px] text-gray-400">কোনো কমেন্ট নেই।</div>`;
-          return;
-        }
-
-        snap.forEach(docSnap => {
-          const c = docSnap.data();
-          const commentId = docSnap.id;
-
-          db.collection('posts').doc(postId).collection('comments').doc(commentId).collection('reactions').onSnapshot(reactSnap => {
-            const reactCountEl = document.getElementById(`comment-react-count-${commentId}`);
-            if(reactCountEl) reactCountEl.innerText = reactSnap.size;
-            const reactBtnEl = document.getElementById(`comment-react-btn-${commentId}`);
-            if(reactBtnEl && reactSnap.docs.some(d => d.id === auth.currentUser.uid)) {
-              reactBtnEl.classList.add('text-blue-500', 'font-bold');
-            } else if(reactBtnEl) {
-              reactBtnEl.classList.remove('text-blue-500', 'font-bold');
-            }
-          });
-
-          list.innerHTML += `
-            <div class="bg-gray-50 dark:bg-zinc-800/60 p-2 rounded-lg space-y-1">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-[11px] text-blue-500 cursor-pointer hover:underline" onclick="viewUserProfile('${c.userId}')">${c.userName}:</span>
-                <div class="flex items-center space-x-2 text-[10px]">
-                  <button onclick="toggleCommentReact('${postId}', '${commentId}')" id="comment-react-btn-${commentId}" class="hover:underline">👍 লাইক (<span id="comment-react-count-${commentId}">0</span>)</button>
-                  <button onclick="setCommentReply('${postId}', '${commentId}', '${c.userName}')" class="text-gray-500 hover:underline">রিপ্লাই</button>
-                </div>
-              </div>
-              <div class="text-[11px]">${formatTaggedText(c.text)}</div>
-            </div>
-          `;
-        });
-      });
+    } catch(e) {
+      console.warn("Firebase Storage unavailable, using Local Base64 Storage:", e);
+      fallbackToLocalStorage();
     }
+  };
 
-    window.openShareModal = function(postId) {
-      const modal = document.getElementById('share-modal');
-      const linkInput = document.getElementById('share-link-input');
-      const postUrl = window.location.origin + window.location.pathname + '#post-' + postId;
-      linkInput.value = postUrl;
-      modal.classList.remove('hidden');
-    };
-
-    window.closeShareModal = function() {
-      document.getElementById('share-modal').classList.add('hidden');
-    };
-
-    window.copyShareLink = function() {
-      const linkInput = document.getElementById('share-link-input');
-      linkInput.select();
-      navigator.clipboard.writeText(linkInput.value);
-      alert('পোস্টের লিংক সফলভাবে কপি করা হয়েছে!');
-      closeShareModal();
-    };
-
-    function loadRealUsersAndRequests() {
-      db.collection('users').doc(auth.currentUser.uid).collection('friends').onSnapshot(friendsSnap => {
-        const friendIds = [];
-        friendsSnap.forEach(fDoc => friendIds.push(fDoc.id));
-        friendIds.push(auth.currentUser.uid);
-
-        db.collection('users').doc(auth.currentUser.uid).collection('friendRequests').onSnapshot(reqSnap => {
-          const reqSenderIds = [];
-          reqSnap.forEach(rDoc => reqSenderIds.push(rDoc.data().senderId));
-
-          const badge = document.getElementById('friend-badge');
-          const badgeM = document.getElementById('friend-badge-m');
-          if(!reqSnap.empty) {
-            if(badge) badge.classList.remove('hidden');
-            if(badgeM) badgeM.classList.remove('hidden');
-            triggerNotificationUI("আপনার কাছে নতুন ফ্রেন্ড রিকোয়েস্ট এসেছে!");
-          } else {
-            if(badge) badge.classList.add('hidden');
-            if(badgeM) badgeM.classList.add('hidden');
-          }
-
-          db.collection('users').onSnapshot(snapshot => {
-            allLoadedSuggestions = [];
-            snapshot.forEach(docSnap => {
-              const u = docSnap.data();
-              if(!friendIds.includes(u.uid) && !reqSenderIds.includes(u.uid)) {
-                db.collection('users').doc(u.uid).collection('friendRequests').doc(auth.currentUser.uid).get().then(myReqDoc => {
-                  u.hasRequested = myReqDoc.exists;
-                  allLoadedSuggestions.push(u);
-                  renderSuggestions(allLoadedSuggestions);
-                });
-              }
-            });
-          });
-
-          const reqContainer = document.getElementById('friend-requests-list');
-          reqContainer.innerHTML = '';
-
-          if(reqSnap.empty) {
-            reqContainer.innerHTML = `<div class="text-xs text-gray-400">কোনো নতুন ফ্রেন্ড রিকোয়েস্ট নেই।</div>`;
-            return;
-          }
-
-          reqSnap.forEach(docSnap => {
-            const req = docSnap.data();
-            reqContainer.innerHTML += `
-              <div class="flex items-center justify-between p-2 bg-gray-50 dark:bg-zinc-800 rounded-xl">
-                <span class="text-xs font-bold cursor-pointer hover:underline" onclick="viewUserProfile('${req.senderId}')">${req.senderName}</span>
-                <div class="flex space-x-2">
-                  <button onclick="acceptRequest('${req.senderId}')" class="bg-blue-600 text-white text-xs px-3 py-1 rounded-xl font-bold">Accept</button>
-                  <button onclick="deleteRequest('${req.senderId}')" class="bg-gray-300 dark:bg-zinc-700 text-xs px-3 py-1 rounded-xl font-bold">Delete</button>
-                </div>
-              </div>
-            `;
-          });
-        });
-      });
+  // Firestore Data Sync Functions
+  window.saveToFirebase = async function(dataToSave) {
+    try {
+      await setDoc(doc(db, "portfolio", "mainData"), dataToSave);
+      console.log("Firestore-e Live Save Hoyeche!");
+    } catch(e) {
+      console.error("Firestore Save Error: ", e);
     }
+  };
 
-    function renderSuggestions(usersList) {
-      const sugContainer = document.getElementById('friend-suggestions-list');
-      sugContainer.innerHTML = '';
-
-      if(usersList.length === 0) {
-        sugContainer.innerHTML = `<div class="text-xs text-gray-400">কোনো ব্যবহারকারী পাওয়া যায়নি।</div>`;
-        return;
-      }
-
-      usersList.forEach(u => {
-        sugContainer.innerHTML += `
-          <div id="user-card-${u.uid}" class="flex items-center justify-between">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="viewUserProfile('${u.uid}')">
-              <img src="${u.profilePic}" class="w-10 h-10 rounded-full object-cover" />
-              <div>
-                <div class="text-xs font-bold hover:underline">${u.name}</div>
-                <div class="text-[10px] text-gray-400">${u.email}</div>
-              </div>
-            </div>
-            ${u.hasRequested ? 
-              `<button onclick="cancelSentFriendRequest('${u.uid}')" class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Cancel</button>` :
-              `<button onclick="sendFriendRequest('${u.uid}', '${u.name}')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold">+ Add Friend</button>`
-            }
-          </div>
-        `;
-      });
+  // Listen for Live Updates from Firestore Database
+  onSnapshot(doc(db, "portfolio", "mainData"), (docSnap) => {
+    if (docSnap.exists()) {
+      window.data = docSnap.data();
+      localStorage.setItem('sr_final_data_v3', JSON.stringify(window.data));
+      if (typeof window.render === 'function') window.render();
     }
+  });
+</script>
 
-    window.filterSuggestions = function(query) {
-      const q = query.toLowerCase().trim();
-      if(!q) {
-        renderSuggestions(allLoadedSuggestions);
-        return;
-      }
-      const filtered = allLoadedSuggestions.filter(u => 
-        (u.name && u.name.toLowerCase().includes(q)) || 
-        (u.email && u.email.toLowerCase().includes(q))
-      );
-      renderSuggestions(filtered);
-    };
+<script>
+const STORAGE_KEY = 'sr_final_data_v3';
 
-    window.clearUserSearch = function() {
-      document.getElementById('user-search-input').value = '';
-      renderSuggestions(allLoadedSuggestions);
-    };
+const defaultData={
+profile:{img:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400",name:"Ratul Ahmed",role:"FULL STACK DEVELOPER • SIROJGANJ",bio:"আমি Sirajganj থেকে - Academic Excellence, Programming আর Travel নিয়ে কাজ করি। Super Animated Premium Website বানাই যা দেখলেই মানুষ Wow বলবে।"},
+stats:[{v:"3.92",l:"CGPA"},{v:"150",l:"PROBLEMS"},{v:"12",l:"PROJECTS"},{v:"8",l:"DISTRICTS"}],
+code:[{t:"Skincare Store",d:"Next.js • Vercel"},{t:"Ultra 3D Portfolio",d:"Three.js • Beat Gemini"},{t:"Python Analyzer",d:"Pandas"}],
+academic:[{t:"BSc CSE 3.92",d:"Dean's List"},{t:"Best Developer 2024",d:"Tech Fest"}],
+files:[{t:"Resume / CV",type:"pdf",url:"#",d:"My updated CV in PDF format"},{t:"Project Proposal Document",type:"docs",url:"#",d:"Google Doc / Document file"},{t:"Profile Banner Design",type:"pic",url:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400",d:"High resolution PNG image"}],
+travelTitle:"Exploring Bangladesh",
+travel:["https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400","https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=400","https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=400"],
+now:["Next.js 85%","CP 70%","Travel 90%"],
+social:{whatsapp:"https://wa.me/8801000000000",github:"https://github.com",facebook:"https://facebook.com",instagram:"https://instagram.com",twitter:"https://x.com"}
+};
 
-    window.sendFriendRequest = function(targetUid, targetName) {
-      db.collection('users').doc(targetUid).collection('friendRequests').doc(auth.currentUser.uid).set({
-        senderId: auth.currentUser.uid,
-        senderName: currentUserData.name,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        loadRealUsersAndRequests();
-      });
-    };
+function loadLocalData() {
+  try {
+    const rawData = localStorage.getItem(STORAGE_KEY);
+    return rawData ? JSON.parse(rawData) : defaultData;
+  } catch(e) {
+    console.error("Local Storage Read Error: ", e);
+    return defaultData;
+  }
+}
 
-    window.acceptRequest = function(senderId) {
-      const batch = db.batch();
-      
-      const myFriendRef = db.collection('users').doc(auth.currentUser.uid).collection('friends').doc(senderId);
-      batch.set(myFriendRef, { friendId: senderId, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+let data = loadLocalData();
 
-      const theirFriendRef = db.collection('users').doc(senderId).collection('friends').doc(auth.currentUser.uid);
-      batch.set(theirFriendRef, { friendId: auth.currentUser.uid, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+function render(){
+document.getElementById('homeImg').src=data.profile.img; document.getElementById('homeName').innerHTML=data.profile.name.split(' ').map((w,i)=>i==1?`<span>${w}</span>`:w).join(' '); 
+document.getElementById('homeRole').textContent=data.profile.role; document.getElementById('homeBio').textContent=data.profile.bio;
+document.getElementById('statsGrid').innerHTML=data.stats.map(s=>`<div class="stat"><h3>${s.v}</h3><p>${s.l}</p></div>`).join('');
+document.getElementById('codeGrid').innerHTML=data.code.map(c=>`<div class="card"><h3>${c.t}</h3><p style="color:#a1a1aa">${c.d}</p></div>`).join('');
+document.getElementById('academicGrid').innerHTML=data.academic.map(a=>`<div class="card"><h3>${a.t}</h3><p style="color:#a1a1aa">${a.d}</p></div>`).join('');
 
-      const reqRef = db.collection('users').doc(auth.currentUser.uid).collection('friendRequests').doc(senderId);
-      batch.delete(reqRef);
+// Files Render
+document.getElementById('filesGrid').innerHTML=(data.files||[]).map(f=>{
+  let icon = '📄';
+  if(f.type === 'pdf') icon = '📕';
+  if(f.type === 'docs') icon = '📘';
+  if(f.type === 'pic') icon = '🖼️';
+  return `<div class="file-card">
+    <div>
+      <span class="file-card-type">${icon} ${f.type || 'file'}</span>
+      <h3>${f.t}</h3>
+      <p style="color:#a1a1aa;font-size:13px;margin-top:4px">${f.d||''}</p>
+    </div>
+    <a href="${f.url}" target="_blank" class="file-link-btn">View / Download 🔗</a>
+  </div>`;
+}).join('');
 
-      batch.commit().then(() => {
-        alert("Request Accepted");
-      });
-    };
+document.getElementById('travelTitle').textContent=data.travelTitle;
+document.getElementById('travelGrid').innerHTML=data.travel.map(u=>`<div style="height:180px;border-radius:16px;overflow:hidden"><img src="${u}" style="width:100%;height:100%;object-fit:cover"></div>`).join('');
+document.getElementById('nowGrid').innerHTML=data.now.map(n=>`<div class="card"><h3>${n}</h3></div>`).join('');
+document.getElementById('socialGrid').innerHTML=`
+<a href="${data.social.whatsapp}" target="_blank" class="social-btn" style="--c:#25D366">💬 WhatsApp</a>
+<a href="${data.social.github}" target="_blank" class="social-btn" style="--c:#fff">💻 GitHub</a>
+<a href="${data.social.facebook}" target="_blank" class="social-btn" style="--c:#1877F2">📘 Facebook</a>
+<a href="${data.social.instagram}" target="_blank" class="social-btn" style="--c:#E4405F">📸 Instagram</a>
+<a href="${data.social.twitter}" target="_blank" class="social-btn" style="--c:#1DA1F2">🐦 Twitter</a>`;
+renderEasy();
+}
 
-    window.deleteRequest = function(senderId) {
-      db.collection('users').doc(auth.currentUser.uid).collection('friendRequests').doc(senderId).delete();
-    };
+function renderEasy(){
+document.getElementById('eProfileImg').value=data.profile.img; document.getElementById('eProfileName').value=data.profile.name; document.getElementById('eProfileRole').value=data.profile.role; document.getElementById('eProfileBio').value=data.profile.bio;
+document.getElementById('easyStats').innerHTML=data.stats.map((s,i)=>`<div style="display:flex;gap:6px;margin-bottom:6px"><input id="sv${i}" value="${s.v}"><input id="sl${i}" value="${s.l}"></div>`).join('');
+document.getElementById('easyCode').innerHTML=data.code.map((c,i)=>`<div style="display:flex;gap:6px;margin-bottom:6px"><input id="ct${i}" value="${c.t}"><input id="cd${i}" value="${c.d}"><button class="small-btn" onclick="data.code.splice(${i},1);render()">❌</button></div>`).join('');
+document.getElementById('easyAcademic').innerHTML=data.academic.map((a,i)=>`<div style="display:flex;gap:6px;margin-bottom:6px"><input id="at${i}" value="${a.t}"><input id="ad${i}" value="${a.d}"><button class="small-btn" onclick="data.academic.splice(${i},1);render()">❌</button></div>`).join('');
 
-    function loadChatUsersList() {
-      const chatUsersContainer = document.getElementById('chat-users-list');
-      
-      db.collection('users').doc(auth.currentUser.uid).collection('friends').onSnapshot(friendsSnap => {
-        db.collection('groups').where('members', 'array-contains', auth.currentUser.uid).onSnapshot(groupsSnap => {
-          chatUsersContainer.innerHTML = `
-            <div class="mb-2 pb-2 border-b border-gray-300/50 dark:border-zinc-800">
-              <button onclick="openGroupModal()" class="w-full bg-[#00a884]/10 dark:bg-zinc-800 text-[#00a884] dark:text-emerald-400 font-bold text-[11px] py-2 rounded-xl border border-[#00a884]/20 dark:border-zinc-700 flex items-center justify-center space-x-1 transition hover:bg-[#00a884]/20">
-                <span>+ গ্রুপ তৈরি করুন</span>
-              </button>
-            </div>
-          `;
+// Admin Files List with Firebase Storage File Upload input
+document.getElementById('easyFiles').innerHTML=(data.files||[]).map((f,i)=>`
+<div style="background:rgba(255,255,255,0.02);padding:8px;border-radius:10px;margin-bottom:8px">
+  <div style="display:flex;gap:6px">
+    <input id="ft${i}" value="${f.t}" placeholder="ফাইলের নাম">
+    <select id="ftype${i}">
+      <option value="pdf" ${f.type==='pdf'?'selected':''}>PDF</option>
+      <option value="docs" ${f.type==='docs'?'selected':''}>Docs</option>
+      <option value="pic" ${f.type==='pic'?'selected':''}>Picture</option>
+      <option value="other" ${f.type==='other'?'selected':''}>Other</option>
+    </select>
+    <button class="small-btn" onclick="data.files.splice(${i},1);render()">❌</button>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;margin:4px 0">
+    <label class="upload-btn-label">📁 Upload File to Storage<input type="file" style="display:none" onchange="uploadDocumentFile(this, ${i})"></label>
+    <span id="docProgress${i}" class="upload-progress">Uploading... 0%</span>
+  </div>
+  <input id="furl${i}" value="${f.url}" placeholder="File Link / Storage URL">
+  <input id="fd${i}" value="${f.d||''}" placeholder="বিবরণ / Description">
+</div>
+`).join('');
 
-          if(friendsSnap.empty && groupsSnap.empty) {
-            chatUsersContainer.innerHTML += `<div class="text-[11px] text-gray-400 text-center py-4">আপনার কোনো ফ্রেন্ড বা গ্রুপ নেই।</div>`;
-            return;
-          }
+document.getElementById('easyTravelTitle').value=data.travelTitle; document.getElementById('easyTravel').value=data.travel.join('\n');
+document.getElementById('easyNow').innerHTML=data.now.map((n,i)=>`<div style="display:flex;gap:6px;margin-bottom:6px"><input id="nw${i}" value="${n}"><button class="small-btn" onclick="data.now.splice(${i},1);render()">❌</button></div>`).join('');
+document.getElementById('eWhatsapp').value=data.social.whatsapp; document.getElementById('eGithub').value=data.social.github; document.getElementById('eFacebook').value=data.social.facebook; document.getElementById('eInstagram').value=data.social.instagram; document.getElementById('eTwitter').value=data.social.twitter;
+}
 
-          groupsSnap.forEach(gDoc => {
-            const group = gDoc.data();
-            const groupPic = group.groupPic || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(group.groupName) + '&background=00a884&color=fff');
-            chatUsersContainer.innerHTML += `
-              <div id="chat-group-item-${gDoc.id}" onclick="openChatGroup('${gDoc.id}')" class="p-2.5 hover:bg-gray-200/60 dark:hover:bg-zinc-800 rounded-xl cursor-pointer flex items-center justify-between space-x-2 transition">
-                <div class="flex items-center space-x-2.5 truncate">
-                  <img src="${groupPic}" class="w-9 h-9 rounded-full object-cover border border-emerald-500 shadow-sm" />
-                  <div class="truncate text-xs font-semibold dark:text-gray-200">${group.groupName} <span class="text-[9px] text-gray-500">(গ্রুপ)</span></div>
-                </div>
-              </div>
-            `;
-          });
+// Storage File Upload Helpers
+function uploadProfileImage(input) {
+  if (!input.files || !input.files[0]) return;
+  const progressEl = document.getElementById('profilePicProgress');
+  progressEl.style.display = 'inline';
+  progressEl.textContent = 'Uploading... 0%';
 
-          friendsSnap.forEach(fDoc => {
-            const friendId = fDoc.id;
-            db.collection('users').doc(friendId).get().then(userDoc => {
-              if(userDoc.exists) {
-                const u = userDoc.data();
-                const chatId = [auth.currentUser.uid, friendId].sort().join('_');
-                
-                db.collection('chats').doc(chatId).collection('messages').orderBy('timestamp', 'desc').onSnapshot(mSnap => {
-                  let unreadCount = 0;
-                  mSnap.forEach(mDoc => {
-                    const mData = mDoc.data();
-                    if(mData.senderId !== auth.currentUser.uid && (!mData.seenBy || !mData.seenBy.includes(auth.currentUser.uid))) {
-                      unreadCount++;
-                    }
-                  });
+  window.uploadFileToStorage(input.files[0], 'profile', 
+    (pct) => { progressEl.textContent = `Uploading... ${pct}%`; },
+    (url) => {
+      progressEl.textContent = '✅ Uploaded!';
+      document.getElementById('eProfileImg').value = url;
+      showToast('✅ Profile Picture Saved Successfully!');
+    },
+    (err) => { progressEl.textContent = '❌ Upload failed'; }
+  );
+}
 
-                  const unreadBadgeEl = document.getElementById(`unread-count-${u.uid}`);
-                  if(unreadBadgeEl) {
-                    if(unreadCount > 0) {
-                      unreadBadgeEl.innerText = unreadCount;
-                      unreadBadgeEl.classList.remove('hidden');
-                    } else {
-                      unreadBadgeEl.classList.add('hidden');
-                    }
-                  } else {
-                    setTimeout(() => {
-                      const badgeInit = document.getElementById(`unread-count-${u.uid}`);
-                      if(badgeInit && unreadCount > 0) {
-                        badgeInit.innerText = unreadCount;
-                        badgeInit.classList.remove('hidden');
-                      }
-                    }, 300);
-                  }
-                });
-              
-                chatUsersContainer.innerHTML += `
-                  <div id="chat-user-item-${u.uid}" onclick="openChatWith('${u.uid}', '${u.name}', '${u.profilePic}')" class="p-2.5 hover:bg-gray-200/60 dark:hover:bg-zinc-800 rounded-xl cursor-pointer flex items-center justify-between space-x-2 transition">
-                    <div class="flex items-center space-x-2.5 truncate">
-                      <img src="${u.profilePic}" class="w-9 h-9 rounded-full object-cover border border-gray-300 dark:border-zinc-700" />
-                      <div class="truncate text-xs font-semibold dark:text-gray-200">${u.name}</div>
-                    </div>
-                    <span id="unread-count-${u.uid}" class="hidden bg-[#00a884] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">0</span>
-                  </div>
-                `;
-              }
-            });
-          });
-        });
-      });
-    }
+function uploadTravelImage(input) {
+  if (!input.files || !input.files[0]) return;
+  const progressEl = document.getElementById('travelPicProgress');
+  progressEl.style.display = 'inline';
+  progressEl.textContent = 'Uploading... 0%';
 
-    window.openGroupModal = function() {
-      document.getElementById('create-group-modal').classList.remove('hidden');
-    };
+  window.uploadFileToStorage(input.files[0], 'travel', 
+    (pct) => { progressEl.textContent = `Uploading... ${pct}%`; },
+    (url) => {
+      progressEl.textContent = '✅ Uploaded!';
+      const area = document.getElementById('easyTravel');
+      area.value = area.value ? area.value + '\n' + url : url;
+      showToast('✅ Travel Photo Saved Successfully!');
+    },
+    (err) => { progressEl.textContent = '❌ Upload failed'; }
+  );
+}
 
-    window.closeGroupModal = function() {
-      document.getElementById('create-group-modal').classList.add('hidden');
-    };
+function uploadDocumentFile(input, index) {
+  if (!input.files || !input.files[0]) return;
+  const progressEl = document.getElementById(`docProgress${index}`);
+  if(progressEl) {
+    progressEl.style.display = 'inline';
+    progressEl.textContent = 'Uploading... 0%';
+  }
 
-    window.createChatGroup = function() {
-      const gName = document.getElementById('group-name-input').value.trim();
-      if(!gName) {
-        alert('গ্রুপের নাম লিখুন!');
-        return;
-      }
+  window.uploadFileToStorage(input.files[0], 'documents', 
+    (pct) => { if(progressEl) progressEl.textContent = `Uploading... ${pct}%`; },
+    (url) => {
+      if(progressEl) progressEl.textContent = '✅ Uploaded!';
+      document.getElementById(`furl${index}`).value = url;
+      showToast('✅ File Saved Successfully!');
+    },
+    (err) => { if(progressEl) progressEl.textContent = '❌ Upload failed'; }
+  );
+}
 
-      db.collection('groups').add({
-        groupName: gName,
-        admin: auth.currentUser.uid,
-        members: [auth.currentUser.uid],
-        groupPic: '',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        alert('গ্রুপ সফলভাবে তৈরি হয়েছে!');
-        document.getElementById('group-name-input').value = '';
-        closeGroupModal();
-      });
-    };
+function addCode(){data.code.push({t:"নতুন প্রজেক্ট",d:"বিস্তারিত"});render()}
+function addAcademic(){data.academic.push({t:"নতুন",d:"বিস্তারিত"});render()}
+function addFile(){if(!data.files)data.files=[]; data.files.push({t:"নতুন ফাইল",type:"pdf",url:"#",d:"ফাইলের বিবরণ"});render()}
+function addNow(){data.now.push("নতুন Focus");render()}
 
-    window.openChatWith = function(uid, name, pic) {
-      selectedChatTargetId = uid;
-      isGroupChatTarget = false;
-      currentSelectedGroupData = null;
-      document.getElementById('group-header-actions').classList.add('hidden');
+function saveEasy(){
+data.profile={img:document.getElementById('eProfileImg').value,name:document.getElementById('eProfileName').value,role:document.getElementById('eProfileRole').value,bio:document.getElementById('eProfileBio').value};
+data.stats=data.stats.map((_,i)=>({v:document.getElementById(`sv${i}`).value,l:document.getElementById(`sl${i}`).value}));
+data.code=data.code.map((_,i)=>({t:document.getElementById(`ct${i}`).value,d:document.getElementById(`cd${i}`).value}));
+data.academic=data.academic.map((_,i)=>({t:document.getElementById(`at${i}`).value,d:document.getElementById(`ad${i}`).value}));
 
-      const targetName = document.getElementById('chat-target-name');
-      const targetImg = document.getElementById('chat-target-img');
-      
-      targetName.innerText = name;
-      targetImg.src = pic;
-      targetName.onclick = () => viewUserProfile(uid);
-      targetImg.onclick = () => viewUserProfile(uid);
-      
-      document.getElementById('chat-target-status').innerText = "অনলাইন";
+data.files=(data.files||[]).map((_,i)=>({
+  t:document.getElementById(`ft${i}`).value,
+  type:document.getElementById(`ftype${i}`).value,
+  url:document.getElementById(`furl${i}`).value,
+  d:document.getElementById(`fd${i}`).value
+}));
 
-      // Mobile screen adjustment to show conversation pane
-      if(window.innerWidth < 640) {
-        document.getElementById('chat-users-list').classList.add('hidden');
-        document.getElementById('chat-conversation-pane').classList.remove('hidden');
-        document.getElementById('chat-conversation-pane').classList.add('flex');
-      }
+data.travelTitle=document.getElementById('easyTravelTitle').value; data.travel=document.getElementById('easyTravel').value.split('\n').filter(x=>x.trim()!='');
+data.now=data.now.map((_,i)=>document.getElementById(`nw${i}`).value);
+data.social={whatsapp:document.getElementById('eWhatsapp').value,github:document.getElementById('eGithub').value,facebook:document.getElementById('eFacebook').value,instagram:document.getElementById('eInstagram').value,twitter:document.getElementById('eTwitter').value};
 
-      loadRealMessages();
-    };
+try {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); 
+} catch(e) {
+  console.error("Local storage save error: ", e);
+}
 
-    window.openChatGroup = function(groupId) {
-      selectedChatTargetId = groupId;
-      isGroupChatTarget = true;
-      document.getElementById('group-header-actions').classList.remove('hidden');
+if (typeof window.saveToFirebase === 'function') {
+  window.saveToFirebase(data);
+}
+render(); showToast('✅ Saved! সব আপডেট হয়ে গেছে');
+}
 
-      db.collection('groups').doc(groupId).onSnapshot(docSnap => {
-        if(docSnap.exists) {
-          currentSelectedGroupData = docSnap.data();
-          if(selectedChatTargetId === groupId) {
-            const groupName = currentSelectedGroupData.groupName;
-            const groupPic = currentSelectedGroupData.groupPic || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(groupName) + '&background=00a884&color=fff');
-            
-            const targetName = document.getElementById('chat-target-name');
-            const targetImg = document.getElementById('chat-target-img');
-            
-            targetName.innerText = groupName + ' (গ্রুপ চ্যাট)';
-            targetImg.src = groupPic;
-            targetName.onclick = null;
-            targetImg.onclick = null;
-            
-            document.getElementById('chat-target-status').innerText = `মেম্বার সংখ্যা: ${currentSelectedGroupData.members.length}`;
-          }
-        }
-      });
-
-      // Mobile screen adjustment to show conversation pane
-      if(window.innerWidth < 640) {
-        document.getElementById('chat-users-list').classList.add('hidden');
-        document.getElementById('chat-conversation-pane').classList.remove('hidden');
-        document.getElementById('chat-conversation-pane').classList.add('flex');
-      }
-
-      loadRealMessages();
-    };
-
-    window.backToChatList = function() {
-      if(window.innerWidth < 640) {
-        document.getElementById('chat-users-list').classList.remove('hidden');
-        document.getElementById('chat-conversation-pane').classList.add('hidden');
-        document.getElementById('chat-conversation-pane').classList.remove('flex');
-      }
-    };
-
-    window.openGroupSettingsModal = function() {
-      if(!currentSelectedGroupData) return;
-      
-      const modal = document.getElementById('group-settings-modal');
-      modal.classList.remove('hidden');
-      document.getElementById('settings-group-name-input').value = currentSelectedGroupData.groupName;
-      groupSettingsImageBase64 = currentSelectedGroupData.groupPic || '';
-
-      const isAdmin = currentSelectedGroupData.admin === auth.currentUser.uid;
-      const adminSection = document.getElementById('admin-only-settings');
-      
-      if(isAdmin) {
-        adminSection.classList.remove('hidden');
-        // Load friends list to add to group
-        const addListContainer = document.getElementById('group-add-friends-list');
-        addListContainer.innerHTML = '';
-
-        if(myFriendsListCache.length === 0) {
-          addListContainer.innerHTML = `<div class="text-[10px] text-gray-400">যোগ করার মতো কোনো ফ্রেন্ড নেই।</div>`;
-        } else {
-          myFriendsListCache.forEach(friend => {
-            const alreadyMember = currentSelectedGroupData.members.includes(friend.uid);
-            addListContainer.innerHTML += `
-              <div class="flex items-center justify-between bg-gray-50 dark:bg-zinc-800 p-2 rounded-xl">
-                <div class="flex items-center space-x-2">
-                  <img src="${friend.profilePic}" class="w-6 h-6 rounded-full object-cover" />
-                  <span class="text-xs font-semibold">${friend.name}</span>
-                </div>
-                ${alreadyMember ? 
-                  '<span class="text-[10px] text-green-500 font-bold">Already Added</span>' : 
-                  `<button onclick="addFriendToGroup('${friend.uid}')" class="bg-blue-600 text-white text-[10px] px-2 py-1 rounded-lg font-bold">Add</button>`
-                }
-              </div>
-            `;
-          });
-        }
-      } else {
-        adminSection.classList.add('hidden');
-      }
-    };
-
-    window.closeGroupSettingsModal = function() {
-      document.getElementById('group-settings-modal').classList.add('hidden');
-    };
-
-    window.saveGroupInfoChanges = function() {
-      if(!currentSelectedGroupData || currentSelectedGroupData.admin !== auth.currentUser.uid) return;
-      const newName = document.getElementById('settings-group-name-input').value.trim();
-      if(!newName) {
-        alert('নাম দেওয়া আবশ্যক!');
-        return;
-      }
-
-      db.collection('groups').doc(selectedChatTargetId).update({
-        groupName: newName,
-        groupPic: groupSettingsImageBase64 || currentSelectedGroupData.groupPic || ''
-      }).then(() => {
-        alert('গ্রুপের তথ্য আপডেট হয়েছে!');
-        closeGroupSettingsModal();
-      });
-    };
-
-    window.addFriendToGroup = function(friendUid) {
-      if(!currentSelectedGroupData || currentSelectedGroupData.admin !== auth.currentUser.uid) return;
-
-      db.collection('groups').doc(selectedChatTargetId).update({
-        members: firebase.firestore.FieldValue.arrayUnion(friendUid)
-      }).then(() => {
-        alert('ফ্রেন্ডকে গ্রুপে সফলভাবে যুক্ত করা হয়েছে!');
-        openGroupSettingsModal(); // Refresh list
-      });
-    };
-
-    window.leaveCurrentGroup = function() {
-      if(!currentSelectedGroupData || !selectedChatTargetId) return;
-
-      if(confirm('আপনি কি সত্যিই এই গ্রুপ থেকে লেভ নিতে চান?')) {
-        db.collection('groups').doc(selectedChatTargetId).update({
-          members: firebase.firestore.FieldValue.arrayRemove(auth.currentUser.uid)
-        }).then(() => {
-          alert('আপনি গ্রুপ থেকে সফলভাবে লিভ নিয়েছেন।');
-          selectedChatTargetId = null;
-          isGroupChatTarget = false;
-          document.getElementById('group-header-actions').classList.add('hidden');
-          document.getElementById('chat-target-name').innerText = 'চ্যাট সিলেক্ট করুন';
-          document.getElementById('chat-messages-box').innerHTML = `<div class="text-xs text-center text-gray-500 dark:text-gray-400 mt-10 bg-white/60 dark:bg-zinc-800/60 py-3 px-4 rounded-xl shadow-sm mx-auto max-w-xs">মেসেজ আদান-প্রদান করতে কোনো ফ্রেন্ড বা গ্রুপ নির্বাচন করুন।</div>`;
-          backToChatList();
-        });
-      }
-    };
-
-    window.setReplyTo = function(msgText) {
-      replyingToMessage = msgText;
-      const preview = document.getElementById('reply-preview-container');
-      const textEl = document.getElementById('reply-preview-text');
-      preview.classList.remove('hidden');
-      textEl.innerText = `রিপ্লাই হচ্ছে: "${msgText}"`;
-    };
-
-    window.cancelReply = function() {
-      replyingToMessage = null;
-      document.getElementById('reply-preview-container').classList.add('hidden');
-    };
-
-    function loadRealMessages() {
-      if(!selectedChatTargetId) return;
-
-      const pathRef = isGroupChatTarget ? 
-        db.collection('groups').doc(selectedChatTargetId).collection('messages') :
-        db.collection('chats').doc([auth.currentUser.uid, selectedChatTargetId].sort().join('_')).collection('messages');
-      
-      pathRef.orderBy('timestamp', 'asc').onSnapshot(snapshot => {
-        const msgBox = document.getElementById('chat-messages-box');
-        msgBox.innerHTML = '';
-
-        if(snapshot.empty) {
-          msgBox.innerHTML = `<div class="text-xs text-center text-gray-500 dark:text-gray-400 mt-5 bg-white/70 dark:bg-zinc-800/70 py-2.5 px-4 rounded-xl shadow-sm mx-auto max-w-xs">মেসেজ পাঠিয়ে চ্যাট শুরু করুন!</div>`;
-          return;
-        }
-
-        let hasNewIncoming = false;
-
-        snapshot.forEach(docSnap => {
-          const msg = docSnap.data();
-          const isMe = msg.senderId === auth.currentUser.uid;
-
-          if(!isMe && !isGroupChatTarget && selectedChatTargetId !== msg.senderId) {
-            hasNewIncoming = true;
-          }
-
-          if(!isMe && (!msg.seenBy || !msg.seenBy.includes(auth.currentUser.uid))) {
-            docSnap.ref.update({
-              seenBy: firebase.firestore.FieldValue.arrayUnion(auth.currentUser.uid)
-            });
-          }
-
-          const bubbleClasses = isMe 
-            ? 'bg-[#d9fdd3] dark:bg-[#005c4b] text-gray-900 dark:text-gray-100 rounded-tr-none shadow-sm' 
-            : 'bg-white dark:bg-[#202c33] text-gray-900 dark:text-gray-100 rounded-tl-none shadow-sm';
-
-          msgBox.innerHTML += `
-            <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} space-y-1 my-1">
-              <div class="group relative ${bubbleClasses} p-2.5 rounded-2xl text-xs max-w-[85%] sm:max-w-[70%] space-y-1">
-                ${msg.senderName && isGroupChatTarget && !isMe ? `<div class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">${msg.senderName}</div>` : ''}
-                ${msg.replyTo ? `<div class="bg-black/10 dark:bg-white/10 p-1.5 rounded-lg text-[10px] mb-1 border-l-2 border-emerald-500">রিপ্লাই: ${msg.replyTo}</div>` : ''}
-                ${msg.image ? `<div class="space-y-1"><img src="${msg.image}" class="w-full rounded-xl max-h-48 object-cover" /><a href="${msg.image}" target="_blank" download class="block text-[10px] underline text-right opacity-80">ডাউনলোড ছবি</a></div>` : ''}
-                ${msg.text ? `<div>${msg.text}</div>` : ''}
-                
-                <button onclick="setReplyTo('${msg.text || 'ছবি'}')" class="absolute -top-3 ${isMe ? '-left-6' : '-right-6'} hidden group-hover:block bg-gray-300 dark:bg-zinc-700 text-black dark:text-white text-[10px] px-1.5 py-0.5 rounded shadow">রিপ্লাই</button>
-              </div>
-            </div>
-          `;
-        });
-
-        const chatBadge = document.getElementById('chat-badge');
-        const chatBadgeM = document.getElementById('chat-badge-m');
-        if(hasNewIncoming) {
-          if(chatBadge) chatBadge.classList.remove('hidden');
-          if(chatBadgeM) chatBadgeM.classList.remove('hidden');
-          triggerNotificationUI("আপনার কাছে নতুন মেসেজ এসেছে!");
-        } else {
-          if(chatBadge) chatBadge.classList.add('hidden');
-          if(chatBadgeM) chatBadgeM.classList.add('hidden');
-        }
-
-        msgBox.scrollTop = msgBox.scrollHeight;
-      });
-    }
-
-    document.getElementById('send-msg-btn').addEventListener('click', () => {
-      const input = document.getElementById('chat-input-field');
-      const text = input.value.trim();
-
-      if((!text && !chatImageBase64) || !selectedChatTargetId) return;
-
-      const pathRef = isGroupChatTarget ? 
-        db.collection('groups').doc(selectedChatTargetId).collection('messages') :
-        db.collection('chats').doc([auth.currentUser.uid, selectedChatTargetId].sort().join('_')).collection('messages');
-
-      pathRef.add({
-        senderId: auth.currentUser.uid,
-        senderName: currentUserData?.name || 'User',
-        text: text,
-        image: chatImageBase64 || '',
-        replyTo: replyingToMessage || null,
-        seenBy: [auth.currentUser.uid],
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        input.value = '';
-        document.getElementById('chat-image-file').value = '';
-        document.getElementById('chat-file-label').innerText = "ছবি যুক্ত করুন";
-        chatImageBase64 = '';
-        cancelReply();
-        
-        const msgBox = document.getElementById('chat-messages-box');
-        msgBox.scrollTop = msgBox.scrollHeight;
-      });
-    });
-  </script>
+const scene=new THREE.Scene(); const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);
+const renderer=new THREE.WebGLRenderer({canvas:document.getElementById('bg3d'),alpha:true,antialias:true}); renderer.setSize(innerWidth,innerHeight);
+const geo=new THREE.TorusKnotGeometry(9,2.5,100,14); const mat=new THREE.MeshStandardMaterial({color:0x8b5cf6,wireframe:true,transparent:true,opacity:0.5});
+const torus=new THREE.Mesh(geo,mat); scene.add(torus); scene.add(new THREE.PointLight(0xffffff,1).translateX(5).translateY(5).translateZ(5)); camera.position.z=26;
+(function anim(){requestAnimationFrame(anim); torus.rotation.x+=0.006; torus.rotation.y+=0.008; renderer.render(scene,camera)})();
+function openPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'))}
+function openAdminLogin(){document.getElementById('adminLogin').style.display='flex'}
+function closeAdminLogin(){document.getElementById('adminLogin').style.display='none'}
+function checkAdmin(){if(document.getElementById('adminPass').value==='ratul_cst'){closeAdminLogin(); document.getElementById('adminPanel').style.display='flex'; showToast('✅ Admin Unlocked')}else showToast('❌ ভুল পাসওয়ার্ড!')}
+function closeAdmin(){document.getElementById('adminPanel').style.display='none'}
+function showToast(t){const el=document.getElementById('toast'); el.textContent=t; el.style.transform='translate(-50%,0)'; setTimeout(()=>el.style.transform='translate(-50%,150px)',3000)}
+render();
+</script>
 </body>
 </html>
