@@ -39,7 +39,6 @@ select option{background:#0a0a0f;color:#fff}
 .file-card{display:flex;flex-direction:column;justify-content:space-between;gap:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:16px}
 .file-card-type{display:inline-block;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700;text-transform:uppercase;background:rgba(139,92,246,0.2);color:#8b5cf6;margin-bottom:8px}
 .file-link-btn{display:inline-block;padding:8px 12px;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff;text-decoration:none;font-weight:700;font-size:12px;text-align:center;margin-top:8px}
-/* Storage File Upload Control UI Elements */
 .upload-btn-label{display:inline-block;padding:8px 14px;border-radius:10px;background:rgba(139,92,246,0.3);border:1px dashed #8b5cf6;color:#fff;font-size:12px;font-weight:700;cursor:pointer;transition:0.3s;margin-bottom:8px}
 .upload-btn-label:hover{background:rgba(139,92,246,0.5)}
 .upload-progress{font-size:11px;color:#06b6d4;margin-bottom:8px;display:none}
@@ -55,7 +54,7 @@ select option{background:#0a0a0f;color:#fff}
 <div id="home" class="page active"><div class="hero">
 <div class="profile-wrap">
 <div class="profile-img-box"><img id="homeImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400" alt="profile"></div>
-<div class="profile-info"><h1 id="homeName">Ratul<br><span>Ahmed</span></h1><div class="role" id="homeRole">FULL STACK DEVELOPER • SIROJGANJ</div><p class="bio" id="homeBio">আমি Sirajganj থেকে - Academic Excellence, Programming আর Travel নিয়ে কাজ করি। Super Animated Premium Website বানাই যা দেখলেই মানুষ Wow বলবে। Gemini কে হারানোর মিশনে আছি!</p></div>
+<div class="profile-info"><h1 id="homeName">Ratul<br><span>Ahmed</span></h1><div class="role" id="homeRole">FULL STACK DEVELOPER • SIROJGANJ</div><p class="bio" id="homeBio">Ami Sirajganj theke - Academic Excellence, Programming ar Travel niye kaj kori. Super Animated Premium Website banai ja dekhlei manush Wow bolbe.</p></div>
 </div>
 <div class="grid-btns">
 <div class="btn3d" onclick="openPage('stats')">📊 STATS</div><div class="btn3d" onclick="openPage('code')">💻 CODE</div><div class="btn3d" onclick="openPage('academic')">🎓 ACADEMIC</div><div class="btn3d" onclick="openPage('files')">📁 FILES</div><div class="btn3d" onclick="openPage('travel')">✈️ TRAVEL</div><div class="btn3d" onclick="openPage('now')">🔥 NOW</div><div class="btn3d" onclick="openPage('contact')">📩 CONTACT</div>
@@ -66,7 +65,6 @@ select option{background:#0a0a0f;color:#fff}
 <div id="code" class="page"><h2>Programming Hub</h2><div class="cards" id="codeGrid"></div><br><button class="nav-btn" onclick="openPage('home')">← HOME</button></div>
 <div id="academic" class="page"><h2>Academic</h2><div class="cards" id="academicGrid"></div><br><button class="nav-btn" onclick="openPage('home')">← HOME</button></div>
 
-<!-- Files Page -->
 <div id="files" class="page"><h2>My File Storage / Documents</h2><p style="color:#a1a1aa;margin-bottom:15px">PDF, Docs, Images ebong onnano file gulo ekhane shongrohito ache.</p><div class="cards" id="filesGrid"></div><br><button class="nav-btn" onclick="openPage('home')">← HOME</button></div>
 
 <div id="travel" class="page"><h2 id="travelTitle"></h2><div class="cards" id="travelGrid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))"></div><br><button class="nav-btn" onclick="openPage('home')">← HOME</button></div>
@@ -76,43 +74,40 @@ select option{background:#0a0a0f;color:#fff}
 <div style="max-width:500px;margin-top:30px"><input id="n" placeholder="Your Name"><input id="e" placeholder="Email"><textarea id="m" rows="4" placeholder="Message"></textarea><button class="btn-send" onclick="showToast('✅ Message Sent!')">Send Message 🚀</button></div>
 <br><button class="nav-btn" onclick="openPage('home')">← HOME</button></div>
 
-<div id="adminLogin"><div class="admin-box" style="max-width:400px"><h2>🔒 Admin Login</h2><p style="color:#a1a1aa;font-size:13px;margin:8px 0">পাসওয়ার্ড: ratul_cst</p><input id="adminPass" type="password" placeholder="ratul_cst"><button class="btn-send" onclick="checkAdmin()">Unlock 🔓</button><button class="nav-btn" style="width:100%;margin-top:10px" onclick="closeAdminLogin()">Cancel</button></div></div>
+<div id="adminLogin"><div class="admin-box" style="max-width:400px"><h2>🔒 Admin Login</h2><p style="color:#a1a1aa;font-size:13px;margin:8px 0">Password: ratul_cst</p><input id="adminPass" type="password" placeholder="ratul_cst"><button class="btn-send" onclick="checkAdmin()">Unlock 🔓</button><button class="nav-btn" style="width:100%;margin-top:10px" onclick="closeAdminLogin()">Cancel</button></div></div>
 
 <div id="adminPanel"><div class="admin-box">
-<h2>⚙️ Easy Admin - সব Edit করো (No Code)</h2>
+<h2>⚙️ Easy Admin - Sob Edit Koro (No Code)</h2>
 
-<div class="edit-group"><h4>👤 1. Home Profile - তোমার ছবি, নাম, Bio</h4>
-<label style="font-size:11px;color:#a1a1aa">ছবির লিংক (Img URL) বা ডিভাইস থেকে আপলোড:</label>
+<div class="edit-group"><h4>👤 1. Home Profile</h4>
+<label style="font-size:11px;color:#a1a1aa">Image Link (URL) or Device Upload:</label>
 <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">
   <label class="upload-btn-label">📁 Upload Profile Pic<input type="file" id="profilePicFile" accept="image/*" style="display:none" onchange="uploadProfileImage(this)"></label>
   <span id="profilePicProgress" class="upload-progress">Uploading... 0%</span>
 </div>
 <input id="eProfileImg" placeholder="https://...jpg">
-<label style="font-size:11px;color:#a1a1aa">নাম:</label><input id="eProfileName" placeholder="Ratul Ahmed">
-<label style="font-size:11px;color:#a1a1aa">Role / পরিচয়:</label><input id="eProfileRole" placeholder="FULL STACK DEVELOPER">
+<label style="font-size:11px;color:#a1a1aa">Name:</label><input id="eProfileName" placeholder="Ratul Ahmed">
+<label style="font-size:11px;color:#a1a1aa">Role:</label><input id="eProfileRole" placeholder="FULL STACK DEVELOPER">
 <label style="font-size:11px;color:#a1a1aa">Bio:</label><textarea id="eProfileBio" rows="3"></textarea>
 </div>
 
 <div class="edit-group"><h4>📊 2. Stats</h4><div id="easyStats"></div></div>
-
-<div class="edit-group"><h4>💻 3. Projects</h4><div id="easyCode"></div><button class="small-btn" onclick="addCode()">+ নতুন প্রজেক্ট</button></div>
-
-<div class="edit-group"><h4>🎓 4. Academic</h4><div id="easyAcademic"></div><button class="small-btn" onclick="addAcademic()">+ নতুন</button></div>
-
-<div class="edit-group"><h4>📁 5. File Storage (PDF, Docs, Pics, etc.)</h4><div id="easyFiles"></div><button class="small-btn" onclick="addFile()">+ নতুন ফাইল যোগ করো</button></div>
+<div class="edit-group"><h4>💻 3. Projects</h4><div id="easyCode"></div><button class="small-btn" onclick="addCode()">+ New Project</button></div>
+<div class="edit-group"><h4>🎓 4. Academic</h4><div id="easyAcademic"></div><button class="small-btn" onclick="addAcademic()">+ New</button></div>
+<div class="edit-group"><h4>📁 5. File Storage</h4><div id="easyFiles"></div><button class="small-btn" onclick="addFile()">+ Add New File</button></div>
 
 <div class="edit-group"><h4>✈️ 6. Travel Gallery</h4>
 <input id="easyTravelTitle" placeholder="Travel Title">
 <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">
-  <label class="upload-btn-label">📸 Add Travel Photo from Storage<input type="file" id="travelPicFile" accept="image/*" style="display:none" onchange="uploadTravelImage(this)"></label>
+  <label class="upload-btn-label">📸 Add Travel Photo<input type="file" id="travelPicFile" accept="image/*" style="display:none" onchange="uploadTravelImage(this)"></label>
   <span id="travelPicProgress" class="upload-progress">Uploading... 0%</span>
 </div>
-<textarea id="easyTravel" rows="4" placeholder="ছবির লিংক, এক লাইনে একটা"></textarea>
+<textarea id="easyTravel" rows="4" placeholder="Image URL per line"></textarea>
 </div>
 
-<div class="edit-group"><h4>🔥 7. Now Focus</h4><div id="easyNow"></div><button class="small-btn" onclick="addNow()">+ নতুন</button></div>
+<div class="edit-group"><h4>🔥 7. Now Focus</h4><div id="easyNow"></div><button class="small-btn" onclick="addNow()">+ New</button></div>
 
-<div class="edit-group"><h4>📩 8. Contact Social Links - তোমার সব লিংক</h4>
+<div class="edit-group"><h4>📩 8. Social Links</h4>
 <label style="font-size:11px">WhatsApp Link:</label><input id="eWhatsapp" placeholder="https://wa.me/8801...">
 <label style="font-size:11px">GitHub:</label><input id="eGithub" placeholder="https://github.com/...">
 <label style="font-size:11px">Facebook:</label><input id="eFacebook" placeholder="https://facebook.com/...">
@@ -120,72 +115,64 @@ select option{background:#0a0a0f;color:#fff}
 <label style="font-size:11px">Twitter / X:</label><input id="eTwitter" placeholder="https://x.com/...">
 </div>
 
-<button class="btn-send" onclick="saveEasy()" style="background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff">💾 Save All - সাইট আপডেট হবে</button>
-<button class="nav-btn" style="width:100%;margin-top:10px" onclick="closeAdmin()">❌ বন্ধ করো</button>
+<button class="btn-send" onclick="saveEasy()" style="background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff">💾 Save All - Global Sync</button>
+<button class="nav-btn" style="width:100%;margin-top:10px" onclick="closeAdmin()">❌ Close</button>
 </div></div>
 
 <div id="toast"></div>
 
+<!-- FIREBASE MODULE INTEGRATION -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
-  import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-  import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
+  import { getDatabase, ref as dbRef, set, onValue } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+  import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
 
-  // Updated Firebase Config
+  // Config with your credentials
   const firebaseConfig = {
-    apiKey: "AIzaSyAUDB0TX_nBz_LtzxHZu93Hgl6Q11pwc6U",
-    authDomain: "bondu-418b2.firebaseapp.com",
-    databaseURL: "https://bondu-418b2-default-rtdb.firebaseio.com",
-    projectId: "bondu-418b2",
-    storageBucket: "bondu-418b2.firebasestorage.app",
-    messagingSenderId: "771346025654",
-    appId: "1:771346025654:web:a4b97466cb667881582a17",
-    measurementId: "G-CB91WPGM4F"
+    apiKey: "AIzaSyBo3APu2QRSsW6n_MxXy4dXBmq5DJyKJ0c",
+    authDomain: "coc-65cc3.firebaseapp.com",
+    databaseURL: "https://coc-65cc3-default-rtdb.firebaseio.com",
+    projectId: "coc-65cc3",
+    storageBucket: "coc-65cc3.firebasestorage.app",
+    messagingSenderId: "195195556669",
+    appId: "1:195195556669:web:bc60d368ca2df60c076b54",
+    measurementId: "G-50CVRWV8P1"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
-  const db = getFirestore(app);
+  const rtdb = getDatabase(app);
   const storage = getStorage(app);
 
-  // Global Scope Exports
   window.firebaseApp = app;
-  window.firebaseDb = db;
+  window.firebaseRtdb = rtdb;
   window.firebaseStorage = storage;
 
-  // Generic Storage File Upload helper with LocalStorage Fallback
+  // File Upload
   window.uploadFileToStorage = function(file, folderPath, onProgress, onSuccess, onError) {
     if(!file) return;
-
-    // Helper: LocalStorage / FileReader Fallback
     const fallbackToLocalStorage = () => {
       const reader = new FileReader();
       reader.onload = function(e) {
         if(onProgress) onProgress(100);
         if(onSuccess) onSuccess(e.target.result);
       };
-      reader.onerror = function(err) {
-        if(onError) onError(err);
-      };
+      reader.onerror = function(err) { if(onError) onError(err); };
       reader.readAsDataURL(file);
     };
 
     try {
       const fileName = Date.now() + '_' + file.name;
-      const storageRef = ref(storage, folderPath + '/' + fileName);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+      const fileRef = storageRef(storage, folderPath + '/' + fileName);
+      const uploadTask = uploadBytesResumable(fileRef, file);
 
       uploadTask.on('state_changed', 
         (snapshot) => {
           const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
           if(onProgress) onProgress(progress);
         }, 
-        (error) => {
-          console.warn("Storage Upload Error, switching to Local Base64 Storage:", error);
-          fallbackToLocalStorage();
-        }, 
+        (error) => { fallbackToLocalStorage(); }, 
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             if(onSuccess) onSuccess(downloadURL);
@@ -193,25 +180,24 @@ select option{background:#0a0a0f;color:#fff}
         }
       );
     } catch(e) {
-      console.warn("Firebase Storage unavailable, using Local Base64 Storage:", e);
       fallbackToLocalStorage();
     }
   };
 
-  // Firestore Data Sync Functions
+  // GLOBAL SAVE TO REALTIME DATABASE
   window.saveToFirebase = async function(dataToSave) {
     try {
-      await setDoc(doc(db, "portfolio", "mainData"), dataToSave);
-      console.log("Firestore-e Live Save Hoyeche!");
+      await set(dbRef(rtdb, 'portfolio/mainData'), dataToSave);
+      console.log("Database Sync Successful!");
     } catch(e) {
-      console.error("Firestore Save Error: ", e);
+      console.error("Firebase Save Error: ", e);
     }
   };
 
-  // Listen for Live Updates from Firestore Database
-  onSnapshot(doc(db, "portfolio", "mainData"), (docSnap) => {
-    if (docSnap.exists()) {
-      window.data = docSnap.data();
+  // REALTIME SYNC LISTENERS FOR ALL DEVICES
+  onValue(dbRef(rtdb, 'portfolio/mainData'), (snapshot) => {
+    if (snapshot.exists()) {
+      window.data = snapshot.val();
       localStorage.setItem('sr_final_data_v3', JSON.stringify(window.data));
       if (typeof window.render === 'function') window.render();
     }
@@ -222,7 +208,7 @@ select option{background:#0a0a0f;color:#fff}
 const STORAGE_KEY = 'sr_final_data_v3';
 
 const defaultData={
-profile:{img:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400",name:"Ratul Ahmed",role:"FULL STACK DEVELOPER • SIROJGANJ",bio:"আমি Sirajganj থেকে - Academic Excellence, Programming আর Travel নিয়ে কাজ করি। Super Animated Premium Website বানাই যা দেখলেই মানুষ Wow বলবে।"},
+profile:{img:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400",name:"Ratul Ahmed",role:"FULL STACK DEVELOPER • SIROJGANJ",bio:"Ami Sirajganj theke - Academic Excellence, Programming ar Travel niye kaj kori. Super Animated Premium Website banai."},
 stats:[{v:"3.92",l:"CGPA"},{v:"150",l:"PROBLEMS"},{v:"12",l:"PROJECTS"},{v:"8",l:"DISTRICTS"}],
 code:[{t:"Skincare Store",d:"Next.js • Vercel"},{t:"Ultra 3D Portfolio",d:"Three.js • Beat Gemini"},{t:"Python Analyzer",d:"Pandas"}],
 academic:[{t:"BSc CSE 3.92",d:"Dean's List"},{t:"Best Developer 2024",d:"Tech Fest"}],
@@ -238,7 +224,6 @@ function loadLocalData() {
     const rawData = localStorage.getItem(STORAGE_KEY);
     return rawData ? JSON.parse(rawData) : defaultData;
   } catch(e) {
-    console.error("Local Storage Read Error: ", e);
     return defaultData;
   }
 }
@@ -252,7 +237,6 @@ document.getElementById('statsGrid').innerHTML=data.stats.map(s=>`<div class="st
 document.getElementById('codeGrid').innerHTML=data.code.map(c=>`<div class="card"><h3>${c.t}</h3><p style="color:#a1a1aa">${c.d}</p></div>`).join('');
 document.getElementById('academicGrid').innerHTML=data.academic.map(a=>`<div class="card"><h3>${a.t}</h3><p style="color:#a1a1aa">${a.d}</p></div>`).join('');
 
-// Files Render
 document.getElementById('filesGrid').innerHTML=(data.files||[]).map(f=>{
   let icon = '📄';
   if(f.type === 'pdf') icon = '📕';
@@ -286,11 +270,10 @@ document.getElementById('easyStats').innerHTML=data.stats.map((s,i)=>`<div style
 document.getElementById('easyCode').innerHTML=data.code.map((c,i)=>`<div style="display:flex;gap:6px;margin-bottom:6px"><input id="ct${i}" value="${c.t}"><input id="cd${i}" value="${c.d}"><button class="small-btn" onclick="data.code.splice(${i},1);render()">❌</button></div>`).join('');
 document.getElementById('easyAcademic').innerHTML=data.academic.map((a,i)=>`<div style="display:flex;gap:6px;margin-bottom:6px"><input id="at${i}" value="${a.t}"><input id="ad${i}" value="${a.d}"><button class="small-btn" onclick="data.academic.splice(${i},1);render()">❌</button></div>`).join('');
 
-// Admin Files List with Firebase Storage File Upload input
 document.getElementById('easyFiles').innerHTML=(data.files||[]).map((f,i)=>`
 <div style="background:rgba(255,255,255,0.02);padding:8px;border-radius:10px;margin-bottom:8px">
   <div style="display:flex;gap:6px">
-    <input id="ft${i}" value="${f.t}" placeholder="ফাইলের নাম">
+    <input id="ft${i}" value="${f.t}" placeholder="File Name">
     <select id="ftype${i}">
       <option value="pdf" ${f.type==='pdf'?'selected':''}>PDF</option>
       <option value="docs" ${f.type==='docs'?'selected':''}>Docs</option>
@@ -300,11 +283,11 @@ document.getElementById('easyFiles').innerHTML=(data.files||[]).map((f,i)=>`
     <button class="small-btn" onclick="data.files.splice(${i},1);render()">❌</button>
   </div>
   <div style="display:flex;gap:10px;align-items:center;margin:4px 0">
-    <label class="upload-btn-label">📁 Upload File to Storage<input type="file" style="display:none" onchange="uploadDocumentFile(this, ${i})"></label>
+    <label class="upload-btn-label">📁 Upload File<input type="file" style="display:none" onchange="uploadDocumentFile(this, ${i})"></label>
     <span id="docProgress${i}" class="upload-progress">Uploading... 0%</span>
   </div>
-  <input id="furl${i}" value="${f.url}" placeholder="File Link / Storage URL">
-  <input id="fd${i}" value="${f.d||''}" placeholder="বিবরণ / Description">
+  <input id="furl${i}" value="${f.url}" placeholder="File Link">
+  <input id="fd${i}" value="${f.d||''}" placeholder="Description">
 </div>
 `).join('');
 
@@ -313,21 +296,18 @@ document.getElementById('easyNow').innerHTML=data.now.map((n,i)=>`<div style="di
 document.getElementById('eWhatsapp').value=data.social.whatsapp; document.getElementById('eGithub').value=data.social.github; document.getElementById('eFacebook').value=data.social.facebook; document.getElementById('eInstagram').value=data.social.instagram; document.getElementById('eTwitter').value=data.social.twitter;
 }
 
-// Storage File Upload Helpers
 function uploadProfileImage(input) {
   if (!input.files || !input.files[0]) return;
   const progressEl = document.getElementById('profilePicProgress');
   progressEl.style.display = 'inline';
-  progressEl.textContent = 'Uploading... 0%';
-
   window.uploadFileToStorage(input.files[0], 'profile', 
     (pct) => { progressEl.textContent = `Uploading... ${pct}%`; },
     (url) => {
       progressEl.textContent = '✅ Uploaded!';
       document.getElementById('eProfileImg').value = url;
-      showToast('✅ Profile Picture Saved Successfully!');
+      showToast('✅ Profile Picture Uploaded!');
     },
-    (err) => { progressEl.textContent = '❌ Upload failed'; }
+    (err) => { progressEl.textContent = '❌ Failed'; }
   );
 }
 
@@ -335,43 +315,38 @@ function uploadTravelImage(input) {
   if (!input.files || !input.files[0]) return;
   const progressEl = document.getElementById('travelPicProgress');
   progressEl.style.display = 'inline';
-  progressEl.textContent = 'Uploading... 0%';
-
   window.uploadFileToStorage(input.files[0], 'travel', 
     (pct) => { progressEl.textContent = `Uploading... ${pct}%`; },
     (url) => {
       progressEl.textContent = '✅ Uploaded!';
       const area = document.getElementById('easyTravel');
       area.value = area.value ? area.value + '\n' + url : url;
-      showToast('✅ Travel Photo Saved Successfully!');
+      showToast('✅ Photo Uploaded!');
     },
-    (err) => { progressEl.textContent = '❌ Upload failed'; }
+    (err) => { progressEl.textContent = '❌ Failed'; }
   );
 }
 
 function uploadDocumentFile(input, index) {
   if (!input.files || !input.files[0]) return;
   const progressEl = document.getElementById(`docProgress${index}`);
-  if(progressEl) {
-    progressEl.style.display = 'inline';
-    progressEl.textContent = 'Uploading... 0%';
-  }
+  if(progressEl) progressEl.style.display = 'inline';
 
   window.uploadFileToStorage(input.files[0], 'documents', 
     (pct) => { if(progressEl) progressEl.textContent = `Uploading... ${pct}%`; },
     (url) => {
       if(progressEl) progressEl.textContent = '✅ Uploaded!';
       document.getElementById(`furl${index}`).value = url;
-      showToast('✅ File Saved Successfully!');
+      showToast('✅ File Saved!');
     },
-    (err) => { if(progressEl) progressEl.textContent = '❌ Upload failed'; }
+    (err) => { if(progressEl) progressEl.textContent = '❌ Failed'; }
   );
 }
 
-function addCode(){data.code.push({t:"নতুন প্রজেক্ট",d:"বিস্তারিত"});render()}
-function addAcademic(){data.academic.push({t:"নতুন",d:"বিস্তারিত"});render()}
-function addFile(){if(!data.files)data.files=[]; data.files.push({t:"নতুন ফাইল",type:"pdf",url:"#",d:"ফাইলের বিবরণ"});render()}
-function addNow(){data.now.push("নতুন Focus");render()}
+function addCode(){data.code.push({t:"New Project",d:"Details"});render()}
+function addAcademic(){data.academic.push({t:"New",d:"Details"});render()}
+function addFile(){if(!data.files)data.files=[]; data.files.push({t:"New File",type:"pdf",url:"#",d:"Details"});render()}
+function addNow(){data.now.push("New Focus");render()}
 
 function saveEasy(){
 data.profile={img:document.getElementById('eProfileImg').value,name:document.getElementById('eProfileName').value,role:document.getElementById('eProfileRole').value,bio:document.getElementById('eProfileBio').value};
@@ -390,16 +365,13 @@ data.travelTitle=document.getElementById('easyTravelTitle').value; data.travel=d
 data.now=data.now.map((_,i)=>document.getElementById(`nw${i}`).value);
 data.social={whatsapp:document.getElementById('eWhatsapp').value,github:document.getElementById('eGithub').value,facebook:document.getElementById('eFacebook').value,instagram:document.getElementById('eInstagram').value,twitter:document.getElementById('eTwitter').value};
 
-try {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); 
-} catch(e) {
-  console.error("Local storage save error: ", e);
-}
+try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
 
 if (typeof window.saveToFirebase === 'function') {
   window.saveToFirebase(data);
 }
-render(); showToast('✅ Saved! সব আপডেট হয়ে গেছে');
+render(); 
+showToast('✅ Saved & Synced Globally!');
 }
 
 const scene=new THREE.Scene(); const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);
@@ -410,10 +382,10 @@ const torus=new THREE.Mesh(geo,mat); scene.add(torus); scene.add(new THREE.Point
 function openPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'))}
 function openAdminLogin(){document.getElementById('adminLogin').style.display='flex'}
 function closeAdminLogin(){document.getElementById('adminLogin').style.display='none'}
-function checkAdmin(){if(document.getElementById('adminPass').value==='ratul_cst'){closeAdminLogin(); document.getElementById('adminPanel').style.display='flex'; showToast('✅ Admin Unlocked')}else showToast('❌ ভুল পাসওয়ার্ড!')}
+function checkAdmin(){if(document.getElementById('adminPass').value==='ratul_cst'){closeAdminLogin(); document.getElementById('adminPanel').style.display='flex'; showToast('✅ Admin Unlocked')}else showToast('❌ Wrong Password!')}
 function closeAdmin(){document.getElementById('adminPanel').style.display='none'}
 function showToast(t){const el=document.getElementById('toast'); el.textContent=t; el.style.transform='translate(-50%,0)'; setTimeout(()=>el.style.transform='translate(-50%,150px)',3000)}
 render();
 </script>
 </body>
-</html>
+      </html>
